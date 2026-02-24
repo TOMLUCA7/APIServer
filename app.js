@@ -1,30 +1,27 @@
-const http = require("http");
+const express = require("express");
+const app = express();
+const port = 3000;
 
-const server = http.createServer((req, res) => {
-  console.log(req.method, req.url);
-
-  if (req.method === "GET") {
-    if (req.url === "/") {
-      res.writeHead(200, { "Content-Type": "text/plain" });
-      res.end("Welcome to my server!");
-    } else if (req.url === "/about") {
-      res.writeHead(200, { "Content-Type": "text/plain" });
-      res.end("About page");
-    } else if (req.url === "/contact") {
-      res.writeHead(200, { "Content-Type": "text/plain" });
-      res.end("Contact page");
-    } else {
-      console.log("404");
-      res.writeHead(404, { "Content-Type": "text/plain" });
-      res.end("Page not found");
-    }
-  } else {
-    res.writeHead(405, { "Content-Type": "text/plain" });
-    res.end("Method Not Allowed");
-  }
+app.get("/", (req, res) => {
+  res.send("Welcome to my server!");
 });
 
-// const port = 3000;
+app.get("/about", (req, res) => {
+  res.send("About page");
+});
+
+app.get("/contact", (req, res) => {
+  res.send("Contact page");
+});
+
+app.use((req, res) => {
+  res.status(404).send("Page not found");
+});
+
+app.listen(port, () => {
+  console.log(`Express server running at http://localhost:${port}`);
+});
+
 // server.listen(port, function () {
 //   console.log(`Node server created at port ${port}`);
 // });
