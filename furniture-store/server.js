@@ -20,7 +20,12 @@ app.get("/", (req, res) => {
 app.get("/sale", (req, res) => {
   const isAdmin = req.query.admin === "true";
   if (isAdmin) {
-    res.send(store.inventory > 10 && store.price / 2);
+    store.forEach((item) => {
+      if (item.inventory > 10) {
+        Math.floor((item.price /= 2));
+      }
+    });
+    res.send(store);
   } else {
     res.status(403).send({ error: "Not authorized" });
   }
