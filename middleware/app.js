@@ -79,7 +79,7 @@ app.post("/users", (req, res) => {
     res.status(400).send({ message: "Invalid ID: must be a number" });
     return;
   }
-  const newUser = { id, name };
+  const newUser = { id: resources.length + 1, name };
   resources.push(newUser);
   res.status(201).send(newUser);
 });
