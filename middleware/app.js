@@ -19,7 +19,7 @@ const posts = [
   { id: 2, title: "Post 2", content: "Content 2", authorId: 2 },
 ];
 
-const comments = [
+const postComments = [
   { id: 1, content: "Comment 1", email: "user1@example.com", postId: 1 },
   { id: 2, content: "Comment 2", email: "user2@example.com", postId: 2 },
 ];
@@ -148,7 +148,7 @@ app.post("/posts/:postId/comments", (req, res) => {
 // exericse 3
 app.get("/posts/:postId/comments", (req, res) => {
   const postId = parseInt(req.params.postId);
-  const comments = comments.filter((c) => c.postId === postId);
+  const comments = postComments.filter((c) => c.postId === postId);
   res.send(comments);
 });
 
