@@ -46,6 +46,11 @@ app.post("/words", (req, res) => {
 // exericse 4
 app.post("/words/:sentence", (req, res) => {
   const sentence = req.params.sentence;
+
+  if (!sentence) {
+    return res.status(400).send({ error: "Missing 'sentence' " });
+  }
+
   const SplitSentenceToWords = sentence.split(" ");
   let numNewWords = 0;
   let numOldWords = 0;
@@ -60,7 +65,7 @@ app.post("/words/:sentence", (req, res) => {
   }
   res.send({
     text: `Added ${numNewWords} words, ${numOldWords} already existed`,
-    currentCount: wordCounter,
+    currentCount: -1,
   });
 });
 
