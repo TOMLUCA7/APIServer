@@ -1,7 +1,10 @@
 import express from "express";
 import { body, validationResult } from "express-validator";
 import Ajv from "ajv";
+import addFormats from "ajv-formats";
+import { postSchema, commentsSchema } from "./postSchema.js";
 const ajv = new Ajv();
+addFormats(ajv);
 
 const app = express();
 const PORT = 3000;
@@ -9,6 +12,11 @@ const PORT = 3000;
 const resources = [
   { id: 1, name: "John" },
   { id: 2, name: "Jane" },
+];
+
+const posts = [
+  { id: 1, title: "Post 1", content: "Content 1", authorId: 1 },
+  { id: 2, title: "Post 2", content: "Content 2", authorId: 2 },
 ];
 
 app.use(express.json());
@@ -42,6 +50,15 @@ const validateId = (req, res, next) => {
     const error = new Error("Invalid ID: must be a number");
     error.status = 400;
     return next(error);
+  }
+  next();
+};
+
+// exericse 3
+const validatePost = (req, res, next) => {
+  const validate = ajv.compile(postSchema);
+  if (!validate(req.body)) {
+    return res.status(400).json({ errors: validate.errors });
   }
   next();
 };
@@ -87,11 +104,41 @@ app.post("/users", (req, res) => {
   res.status(201).send(newUser);
 });
 
+// exericse 3 - AJV validation
+app.post("/posts", validatePost, (req, res) => {
+  res
+    .status(201)
+    .json({ message: "Post created successfully", data: req.body });
+});
+
+// exericse 3
+app.get("/posts", (req, res) => {
+  res.send(posts);
+});
+
+// exericse 3
+const validateComment = (req, res, next) => {
+  const validate = ajv.compile(commentsSchema);
+  if (!validate(req.body)) {
+    return res.status(400).json({ errors: validate.errors });
+  }
+  next();
+};
+
+// exericse 3
+app.post("/comments", validateComment, (req, res) => {
+  res.status(201).json({ message: "Comment added", data: req.body });
+});
+
 // exericse 2
 app.get("/users/:id", validateId, checkIdExists, (req, res) => {
   res.send(req.resource);
 });
 
+// POST /posts/:postId/comments
+app.post("/posts/:postId/comments", (req, res) => {
+  res.status(201).json({ message: "Comment added", data: req.body });
+});
 // exericse 2
 const errorHandler = (err, req, res, next) => {
   const status = err.status || 500;

@@ -16,7 +16,7 @@ export const commentsSchema = {
   properties: {
     content: { type: "string", minLength: 5, maxLength: 500 },
     email: { type: "string", format: "email" },
-    postId: { type: "integer", format: "postId" },
+    postId: { type: "integer" },
   },
   required: ["content", "email", "postId"],
   additionalProperties: false,
