@@ -3,7 +3,10 @@ import express from "express";
 const app = express();
 const PORT = 3000;
 
-const resources = [1, 2, 3, 4, 5];
+const resources = [
+  { id: 1, name: "John" },
+  { id: 2, name: "Jane" },
+];
 
 app.use(express.json());
 
@@ -15,8 +18,6 @@ app.use((req, res, next) => {
   console.log(`[${timestamp}] ${method} ${url}`);
   next();
 });
-
-app.use;
 
 // exericse 1
 let totalRequests = 0;
@@ -45,11 +46,13 @@ const validateId = (req, res, next) => {
 // exericse 2
 const checkIdExists = (req, res, next) => {
   const id = parseInt(req.params.id);
-  if (!resources.includes(id)) {
+  const resource = resources.find((r) => r.id === id);
+  if (!resource) {
     const error = new Error("ID not found");
     error.status = 404;
     return next(error);
   }
+  req.resource = resource;
   next();
 };
 
@@ -66,23 +69,24 @@ app.post("/about", (req, res) => {});
 
 // exericse 2
 app.get("/users", (req, res) => {
-  res.send({ id: resources, name: `User ${resources}` });
+  res.send(resources);
 });
 
+// exericse 2
 app.post("/users", (req, res) => {
-  const id = req.body.id;
-  if (!id) {
+  const { id, name } = req.body;
+  if (!id || typeof id !== "number") {
     res.status(400).send({ message: "Invalid ID: must be a number" });
     return;
   }
-  resources.push(id);
-  res.send({ id, name: `User ${id}` });
+  const newUser = { id, name };
+  resources.push(newUser);
+  res.status(201).send(newUser);
 });
 
 // exericse 2
 app.get("/users/:id", validateId, checkIdExists, (req, res) => {
-  const id = parseInt(req.params.id);
-  res.send({ id, name: `User ${id}` });
+  res.send(req.resource);
 });
 
 // exericse 2
