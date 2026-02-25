@@ -19,6 +19,11 @@ const posts = [
   { id: 2, title: "Post 2", content: "Content 2", authorId: 2 },
 ];
 
+const comments = [
+  { id: 1, content: "Comment 1", email: "user1@example.com", postId: 1 },
+  { id: 2, content: "Comment 2", email: "user2@example.com", postId: 2 },
+];
+
 app.use(express.json());
 
 // exericse 1, logging middleware
@@ -135,10 +140,18 @@ app.get("/users/:id", validateId, checkIdExists, (req, res) => {
   res.send(req.resource);
 });
 
-// POST /posts/:postId/comments
+// exericse 3
 app.post("/posts/:postId/comments", (req, res) => {
   res.status(201).json({ message: "Comment added", data: req.body });
 });
+
+// exericse 3
+app.get("/posts/:postId/comments", (req, res) => {
+  const postId = parseInt(req.params.postId);
+  const comments = comments.filter((c) => c.postId === postId);
+  res.send(comments);
+});
+
 // exericse 2
 const errorHandler = (err, req, res, next) => {
   const status = err.status || 500;
