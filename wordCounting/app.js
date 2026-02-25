@@ -69,6 +69,26 @@ app.post("/words/:sentence", (req, res) => {
   });
 });
 
+// exericse 5
+app.delete("/words/:word", (req, res) => {
+  const word = req.params.word;
+
+  if (!word) {
+    return res.status(400).send({ error: "Missing 'word'" });
+  }
+
+  if (wordCounter[word]) {
+    delete wordCounter[word];
+    res
+      .status(200)
+      .send({ text: `Deleted ${word} successfuly`, currentCount: wordCounter });
+    return;
+  } else {
+    res.status(404).send({ error: "Word not found" });
+    return;
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is up and running on port ${PORT}`);
 });
