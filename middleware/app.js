@@ -69,6 +69,16 @@ app.get("/users", (req, res) => {
   res.send({ id: resources, name: `User ${resources}` });
 });
 
+app.post("/users", (req, res) => {
+  const id = req.body.id;
+  if (!id) {
+    res.status(400).send({ message: "Invalid ID: must be a number" });
+    return;
+  }
+  resources.push(id);
+  res.send({ id, name: `User ${id}` });
+});
+
 // exericse 2
 app.get("/users/:id", validateId, checkIdExists, (req, res) => {
   const id = parseInt(req.params.id);
