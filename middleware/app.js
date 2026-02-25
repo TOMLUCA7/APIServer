@@ -61,7 +61,19 @@ app.get("/", (req, res) => {
   res.send({ message: "Welcome!", requestCount: req.requestCount });
 });
 
+// exericse 1
 app.post("/about", (req, res) => {});
+
+// exericse 2
+app.get("/users", (req, res) => {
+  res.send({ id: resources, name: `User ${resources}` });
+});
+
+// exericse 2
+app.get("/users/:id", validateId, checkIdExists, (req, res) => {
+  const id = parseInt(req.params.id);
+  res.send({ id, name: `User ${id}` });
+});
 
 // exericse 2
 const errorHandler = (err, req, res, next) => {
