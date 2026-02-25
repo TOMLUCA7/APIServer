@@ -1,4 +1,7 @@
 import express from "express";
+import { body, validationResult } from "express-validator";
+import Ajv from "ajv";
+const ajv = new Ajv();
 
 const app = express();
 const PORT = 3000;
