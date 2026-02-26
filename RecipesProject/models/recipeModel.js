@@ -11,3 +11,44 @@ const getRecipes = async () => {
     return [];
   }
 };
+
+const getRecipeByDifficulty = async (difficulty) => {
+  try {
+    const data = await fs.promises.readFile("../data/recipes.js");
+    const recipes = JSON.parse(data);
+    return recipes.filter((recipe) => recipe.difficulty === difficulty);
+  } catch (error) {
+    return [];
+  }
+};
+
+const getRecipeByMaxCookingTime = async (maxCookingTime) => {
+  try {
+    const data = await fs.promises.readFile("../data/recipes.js");
+    const recipes = JSON.parse(data);
+    return recipes.filter((recipe) => recipe.cookingTime <= maxCookingTime);
+  } catch (error) {
+    return [];
+  }
+};
+
+const searchRecipes = async (search) => {
+  try {
+    const data = await fs.promises.readFile("../data/recipes.js");
+    const recipes = JSON.parse(data);
+    return recipes.filter(
+      (recipe) =>
+        recipe.title.toLowerCase().includes(search.toLowerCase()) ||
+        recipe.description.toLowerCase().includes(search.toLowerCase()),
+    );
+  } catch (error) {
+    return [];
+  }
+};
+
+export {
+  getRecipes,
+  getRecipeByDifficulty,
+  getRecipeByMaxCookingTime,
+  searchRecipes,
+};
