@@ -31,7 +31,7 @@ const getRecipeByMaxCookingTime = async (maxCookingTime) => {
 
 const searchRecipes = async (search) => {
   try {
-    const data = await fs.promises.readFile("../data/recipes.js");
+    const data = await fs.promises.readFile("./data/recipes.json");
     const recipes = JSON.parse(data);
     return recipes.filter(
       (recipe) =>
