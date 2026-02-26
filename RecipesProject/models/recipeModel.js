@@ -2,7 +2,7 @@ import fs from "fs";
 
 const getRecipes = async () => {
   try {
-    const data = await fs.promises.readFile("../data/recipes.js");
+    const data = await fs.promises.readFile("./data/recipes.json");
     return JSON.parse(data);
   } catch (error) {
     return [];
@@ -11,7 +11,7 @@ const getRecipes = async () => {
 
 const getRecipeByDifficulty = async (difficulty) => {
   try {
-    const data = await fs.promises.readFile("../data/recipes.js");
+    const data = await fs.promises.readFile("./data/recipes.json");
     const recipes = JSON.parse(data);
     return recipes.filter((recipe) => recipe.difficulty === difficulty);
   } catch (error) {
@@ -21,7 +21,7 @@ const getRecipeByDifficulty = async (difficulty) => {
 
 const getRecipeByMaxCookingTime = async (maxCookingTime) => {
   try {
-    const data = await fs.promises.readFile("../data/recipes.js");
+    const data = await fs.promises.readFile("./data/recipes.json");
     const recipes = JSON.parse(data);
     return recipes.filter((recipe) => recipe.cookingTime <= maxCookingTime);
   } catch (error) {
