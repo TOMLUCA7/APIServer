@@ -13,7 +13,6 @@ const recipeSchema = {
     createdAt: { type: "string", format: "date-time" },
   },
   required: [
-    "id",
     "title",
     "description",
     "ingredients",
@@ -22,9 +21,8 @@ const recipeSchema = {
     "servings",
     "difficulty",
     "rating",
-    "createdAt",
   ],
   additionalProperties: false,
 };
 
-export default { recipeSchema };
+export default recipeSchema;

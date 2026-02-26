@@ -1,4 +1,5 @@
 import fs from "fs";
+import { nanoid } from "nanoid";
 
 const getRecipes = async () => {
   try {
@@ -54,14 +55,19 @@ const getRecipeById = async (id) => {
 };
 
 const addRecipe = async (recipe) => {
+  const newRecipe = {
+    ...recipe,
+    id: nanoid(7),
+    createdAt: new Date().toISOString(),
+  };
   try {
     const data = await fs.promises.readFile("./data/recipes.json");
     const recipes = JSON.parse(data);
-    recipes.push(recipe);
+    recipes.push(newRecipe);
     await fs.promises.writeFile("./data/recipes.json", JSON.stringify(recipes));
-    return recipe;
+    return newRecipe;
   } catch (error) {
-    return [];
+    return null;
   }
 };
 

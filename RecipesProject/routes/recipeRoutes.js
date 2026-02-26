@@ -1,6 +1,6 @@
 import express from "express";
 import recipesController from "../controllers/recipeController.js";
-import { recipeValidation } from "../middlewares/recipesValidation.js";
+import recipesValidation from "../middlewares/recipesValidation.js";
 const router = express.Router();
 
 router.get("/", recipesController.getRecipes);
@@ -12,6 +12,10 @@ router.get(
 router.get("/search/:search", recipesController.searchRecipes);
 router.get("/:id", recipesController.getRecipeById);
 
-router.post("/", recipeValidation, recipesController.addRecipe);
+router.post(
+  "/",
+  recipesValidation.recipeValidation,
+  recipesController.addRecipe,
+);
 
 export default router;
