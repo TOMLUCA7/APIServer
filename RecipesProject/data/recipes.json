@@ -1,34 +1,5 @@
 [
   {
-    "id": "Asw1!Q$",
-    "title": "Honey Garlic Glazed Salmon",
-    "description": "Perfectly seared and baked salmon fillets with a sweet and savory honey garlic glaze.",
-    "ingredients": [
-      "2 Salmon fillets (about 200g each)",
-      "3 tbsp Honey",
-      "2 tbsp Soy sauce",
-      "1 tbsp Lemon juice",
-      "3 Garlic cloves, minced",
-      "1 tbsp Olive oil",
-      "Salt and black pepper to taste",
-      "Lemon slices for garnish"
-    ],
-    "instructions": [
-      "Preheat your oven to 200°C (400°F).",
-      "In a small bowl, whisk together honey, soy sauce, lemon juice, and minced garlic.",
-      "Season salmon fillets with salt and pepper.",
-      "Heat olive oil in an oven-proof skillet and sear salmon skin-side up for 3 minutes.",
-      "Flip the salmon, pour the honey garlic sauce over it, and place the skillet in the oven.",
-      "Bake for 8-10 minutes until the salmon is cooked through and the sauce has thickened.",
-      "Spoon the glaze over the salmon and serve with lemon slices."
-    ],
-    "cookingTime": 15,
-    "servings": 2,
-    "difficulty": "medium",
-    "rating": 4.9,
-    "createdAt": "2026-02-26T12:00:00.000Z"
-  },
-  {
     "id": "A3x0@Q$",
     "title": "Warm Halloumi & Mushroom Salad",
     "description": "A fresh salad topped with seared halloumi cheese and mushrooms sautéed in teriyaki sauce.",
@@ -80,32 +51,5 @@
     "difficulty": "hard",
     "rating": 4.9,
     "createdAt": "2026-02-26T10:26:32.508Z"
-  },
-  {
-    "title": "Beef Wellington Bites",
-    "description": "A sophisticated appetizer featuring tender beef fillet wrapped in mushroom duxelles and flaky puff pastry.",
-    "ingredients": [
-      "400g Beef tenderloin, cut into chunks",
-      "250g Puff pastry sheet",
-      "200g Mushrooms, finely minced",
-      "1 Shallot, finely chopped",
-      "2 tbsp English mustard",
-      "4 slices of Prosciutto",
-      "1 Egg yolk (for egg wash)",
-      "Salt and coarse black pepper"
-    ],
-    "instructions": [
-      "Sear the beef chunks in a very hot pan for 30 seconds per side until browned but raw inside. Let cool.",
-      "In the same pan, sauté minced mushrooms and shallots until all moisture has evaporated (Duxelles).",
-      "Lay out plastic wrap, place prosciutto slices, spread the mushroom mixture, and place the beef on top. Roll tightly and chill for 15 minutes.",
-      "Wrap the chilled beef rolls in puff pastry, seal the edges, and brush with egg yolk.",
-      "Bake at 200°C for 15-20 minutes until the pastry is golden brown. Let rest before serving."
-    ],
-    "cookingTime": 50,
-    "servings": 6,
-    "difficulty": "hard",
-    "rating": 4.9,
-    "createdAt": "2026-02-26T10:29:28.479Z",
-    "id": "DqlPFWI"
   }
 ]

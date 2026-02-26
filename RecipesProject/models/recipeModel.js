@@ -81,6 +81,21 @@ const updateRecipe = async (id, recipe) => {
   }
 };
 
+const deleteRecipe = async (id) => {
+  try {
+    const recipes = await getRecipes();
+    const recipeIndex = recipes.findIndex((recipe) => recipe.id === id);
+    if (recipeIndex === -1) {
+      return null;
+    }
+    recipes.splice(recipeIndex, 1);
+    await fs.promises.writeFile("./data/recipes.json", JSON.stringify(recipes));
+    return true;
+  } catch (error) {
+    return null;
+  }
+};
+
 export default {
   getRecipes,
   getRecipeByDifficulty,
@@ -89,4 +104,5 @@ export default {
   getRecipeById,
   addRecipe,
   updateRecipe,
+  deleteRecipe,
 };

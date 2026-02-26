@@ -24,4 +24,6 @@ router.put(
   recipesController.updateRecipe,
 );
 
+router.delete("/:id", recipesController.deleteRecipe);
+
 export default router;

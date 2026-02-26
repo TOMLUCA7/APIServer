@@ -92,6 +92,18 @@ const updateRecipe = async (req, res) => {
   }
 };
 
+const deleteRecipe = async (req, res) => {
+  try {
+    const recipe = await recipesModel.deleteRecipe(req.params.id);
+    if (!recipe) {
+      return res.status(404).json({ error: "No recipe found by this id" });
+    }
+    res.status(200).json(`Recipe deleted successfully ${req.params.id}`);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export default {
   getRecipes,
   getRecipeByDifficulty,
@@ -100,4 +112,5 @@ export default {
   getRecipeById,
   addRecipe,
   updateRecipe,
+  deleteRecipe,
 };
