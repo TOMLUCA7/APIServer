@@ -96,6 +96,38 @@ const deleteRecipe = async (id) => {
   }
 };
 
+const getStatistics = async () => {
+  const recipesByDifficulty = {};
+  let totalCookingTime = 0;
+  try {
+    const recipes = await getRecipes();
+
+    recipes.forEach((recipe) => {
+      const diff = recipe.difficulty;
+
+      if (!recipesByDifficulty[diff]) {
+        recipesByDifficulty[diff] = 0;
+      }
+      recipesByDifficulty[diff]++;
+    });
+
+    for (const recipe of recipes) {
+      totalCookingTime += recipe.cookingTime;
+    }
+
+    const averageCookingTime =
+      recipes.length > 0 ? totalCookingTime / recipes.length : 0;
+
+    return {
+      totalRecipes: recipes.length,
+      recipesByDifficulty,
+      averageCookingTime,
+    };
+  } catch (error) {
+    return null;
+  }
+};
+
 export default {
   getRecipes,
   getRecipeByDifficulty,
@@ -105,4 +137,5 @@ export default {
   addRecipe,
   updateRecipe,
   deleteRecipe,
+  getStatistics,
 };

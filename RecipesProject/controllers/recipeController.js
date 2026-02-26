@@ -104,6 +104,18 @@ const deleteRecipe = async (req, res) => {
   }
 };
 
+const getStatistics = async (req, res) => {
+  try {
+    const statistics = await recipesModel.getStatistics();
+    if (!statistics) {
+      return res.status(404).json({ error: "No statistics found" });
+    }
+    res.status(200).json(statistics);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export default {
   getRecipes,
   getRecipeByDifficulty,
@@ -113,4 +125,5 @@ export default {
   addRecipe,
   updateRecipe,
   deleteRecipe,
+  getStatistics,
 };
