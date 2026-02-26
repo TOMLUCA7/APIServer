@@ -10,6 +10,9 @@ router.get(
   recipesController.getRecipeByMaxCookingTime,
 );
 router.get("/search/:search", recipesController.searchRecipes);
+
+router.get("/statistics", recipesController.getStatistics);
+
 router.get("/:id", recipesController.getRecipeById);
 
 router.post(
@@ -17,15 +20,11 @@ router.post(
   recipesValidation.recipeValidation,
   recipesController.addRecipe,
 );
-
 router.put(
   "/:id",
   recipesValidation.recipeValidation,
   recipesController.updateRecipe,
 );
-
 router.delete("/:id", recipesController.deleteRecipe);
-
-router.get("/statistics", recipesController.getStatistics);
 
 export default router;
