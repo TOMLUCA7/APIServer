@@ -1,13 +1,13 @@
 import express from "express";
-import recipesModel from "../models/recipeModel.js";
+import recipesController from "../controllers/recipeController.js";
 const router = express.Router();
 
-router.get("/", recipesModel.getRecipes);
-router.get("/difficulty/:difficulty", recipesModel.getRecipeByDifficulty);
+router.get("/", recipesController.getRecipes);
+router.get("/difficulty/:difficulty", recipesController.getRecipeByDifficulty);
 router.get(
   "/maxCookingTime/:maxCookingTime",
-  recipesModel.getRecipeByMaxCookingTime,
+  recipesController.getRecipeByMaxCookingTime,
 );
-router.get("/search/:search", recipesModel.searchRecipes);
+router.get("/search/:search", recipesController.searchRecipes);
 
 export default router;
