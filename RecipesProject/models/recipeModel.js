@@ -1,7 +1,4 @@
 import fs from "fs";
-import nanoid from "nanoid";
-
-import { recipes } from "../data/recipes.js";
 
 const getRecipes = async () => {
   try {
@@ -46,7 +43,7 @@ const searchRecipes = async (search) => {
   }
 };
 
-export {
+export default {
   getRecipes,
   getRecipeByDifficulty,
   getRecipeByMaxCookingTime,

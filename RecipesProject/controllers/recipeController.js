@@ -40,7 +40,7 @@ const searchRecipes = async (req, res) => {
   }
 };
 
-export {
+export default {
   getRecipes,
   getRecipeByDifficulty,
   getRecipeByMaxCookingTime,
