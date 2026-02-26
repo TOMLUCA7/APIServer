@@ -43,9 +43,20 @@ const searchRecipes = async (search) => {
   }
 };
 
+const getRecipeById = async (id) => {
+  try {
+    const data = await fs.promises.readFile("./data/recipes.json");
+    const recipes = JSON.parse(data);
+    return recipes.find((recipe) => recipe.id === id);
+  } catch (error) {
+    return [];
+  }
+};
+
 export default {
   getRecipes,
   getRecipeByDifficulty,
   getRecipeByMaxCookingTime,
   searchRecipes,
+  getRecipeById,
 };

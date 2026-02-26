@@ -18,7 +18,9 @@ const getRecipeByDifficulty = async (req, res) => {
       req.params.difficulty,
     );
     if (!recipes) {
-      return res.status(404).json({ error: "No recipes found" });
+      return res
+        .status(404)
+        .json({ error: "No recipes found by this difficulty" });
     }
     res.status(200).json(recipes);
   } catch (error) {
@@ -32,7 +34,9 @@ const getRecipeByMaxCookingTime = async (req, res) => {
       req.params.maxCookingTime,
     );
     if (!recipes) {
-      return res.status(404).json({ error: "No recipes found" });
+      return res
+        .status(404)
+        .json({ error: "No recipes found by this max cooking time" });
     }
     res.status(200).json(recipes);
   } catch (error) {
@@ -44,9 +48,21 @@ const searchRecipes = async (req, res) => {
   try {
     const recipes = await recipesModel.searchRecipes(req.params.search);
     if (!recipes) {
-      return res.status(404).json({ error: "No recipes found" });
+      return res.status(404).json({ error: "No recipes found by this search" });
     }
     res.status(200).json(recipes);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getRecipeById = async (req, res) => {
+  try {
+    const recipe = await recipesModel.getRecipeById(req.params.id);
+    if (!recipe) {
+      return res.status(404).json({ error: "No recipe found by this id" });
+    }
+    res.status(200).json(recipe);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -57,4 +73,5 @@ export default {
   getRecipeByDifficulty,
   getRecipeByMaxCookingTime,
   searchRecipes,
+  getRecipeById,
 };

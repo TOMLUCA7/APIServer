@@ -9,5 +9,6 @@ router.get(
   recipesController.getRecipeByMaxCookingTime,
 );
 router.get("/search/:search", recipesController.searchRecipes);
+router.get("/:id", recipesController.getRecipeById);
 
 export default router;
