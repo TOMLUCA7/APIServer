@@ -18,4 +18,10 @@ router.post(
   recipesController.addRecipe,
 );
 
+router.put(
+  "/:id",
+  recipesValidation.recipeValidation,
+  recipesController.updateRecipe,
+);
+
 export default router;

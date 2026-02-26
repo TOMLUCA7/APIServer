@@ -1,29 +1,32 @@
 [
   {
     "id": "Asw1!Q$",
-    "title": "Classic Pasta alla Rose",
-    "description": "A rich and velvety pasta dish featuring a perfect blend of tomato sauce and heavy cream.",
+    "title": "Honey Garlic Glazed Salmon",
+    "description": "Perfectly seared and baked salmon fillets with a sweet and savory honey garlic glaze.",
     "ingredients": [
-      "500g Pasta (Penne or Fusilli)",
-      "250ml Cooking cream",
-      "400g Crushed tomatoes",
+      "2 Salmon fillets (about 200g each)",
+      "3 tbsp Honey",
+      "2 tbsp Soy sauce",
+      "1 tbsp Lemon juice",
       "3 Garlic cloves, minced",
-      "2 tbsp Olive oil",
-      "1 tsp Salt, 1/2 tsp Black pepper",
-      "Fresh basil leaves for garnish"
+      "1 tbsp Olive oil",
+      "Salt and black pepper to taste",
+      "Lemon slices for garnish"
     ],
     "instructions": [
-      "Cook the pasta in boiling salted water according to package instructions and drain.",
-      "Heat olive oil in a large skillet and lightly sauté the garlic.",
-      "Add crushed tomatoes, bring to a boil, and simmer for about 5 minutes.",
-      "Stir in the cooking cream and spices until the sauce reaches a uniform orange color.",
-      "Toss the cooked pasta into the sauce, mix for one minute, and serve with fresh basil."
+      "Preheat your oven to 200°C (400°F).",
+      "In a small bowl, whisk together honey, soy sauce, lemon juice, and minced garlic.",
+      "Season salmon fillets with salt and pepper.",
+      "Heat olive oil in an oven-proof skillet and sear salmon skin-side up for 3 minutes.",
+      "Flip the salmon, pour the honey garlic sauce over it, and place the skillet in the oven.",
+      "Bake for 8-10 minutes until the salmon is cooked through and the sauce has thickened.",
+      "Spoon the glaze over the salmon and serve with lemon slices."
     ],
-    "cookingTime": 20,
-    "servings": 4,
-    "difficulty": "easy",
-    "rating": 4.8,
-    "createdAt": "2026-02-26T09:00:00.000Z"
+    "cookingTime": 15,
+    "servings": 2,
+    "difficulty": "medium",
+    "rating": 4.9,
+    "createdAt": "2026-02-26T12:00:00.000Z"
   },
   {
     "id": "A3x0@Q$",
