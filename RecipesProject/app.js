@@ -1,6 +1,7 @@
 import express from "express";
 import { logger } from "./middlewares/logger.js";
 import cors from "cors";
+import recipeRouter from "./routes/recipeRoutes.js";
 
 const app = express();
 const PORT = 3000;
@@ -13,6 +14,8 @@ app.use(logger);
 app.get("/", (req, res) => {
   res.send("Hello World!, this is recipe API");
 });
+
+app.use("/recipes", recipeRouter);
 
 app.all(/^(.*)$/, (req, res) => {
   res.status(404).send("Page not found");
