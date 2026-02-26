@@ -71,6 +71,9 @@ const getRecipeById = async (req, res) => {
 const addRecipe = async (req, res) => {
   try {
     const recipe = await recipesModel.addRecipe(req.body);
+    if (!recipe) {
+      return res.status(400).json({ error: "Failed to add recipe" });
+    }
     res.status(201).json(recipe);
   } catch (error) {
     res.status(500).json({ error: error.message });

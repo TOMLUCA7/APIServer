@@ -12,8 +12,7 @@ const getRecipes = async () => {
 
 const getRecipeByDifficulty = async (difficulty) => {
   try {
-    const data = await fs.promises.readFile("./data/recipes.json");
-    const recipes = JSON.parse(data);
+    const recipes = await getRecipes();
     return recipes.filter((recipe) => recipe.difficulty === difficulty);
   } catch (error) {
     return [];
@@ -22,8 +21,7 @@ const getRecipeByDifficulty = async (difficulty) => {
 
 const getRecipeByMaxCookingTime = async (maxCookingTime) => {
   try {
-    const data = await fs.promises.readFile("./data/recipes.json");
-    const recipes = JSON.parse(data);
+    const recipes = await getRecipes();
     return recipes.filter((recipe) => recipe.cookingTime <= maxCookingTime);
   } catch (error) {
     return [];
@@ -32,8 +30,7 @@ const getRecipeByMaxCookingTime = async (maxCookingTime) => {
 
 const searchRecipes = async (search) => {
   try {
-    const data = await fs.promises.readFile("./data/recipes.json");
-    const recipes = JSON.parse(data);
+    const recipes = await getRecipes();
     return recipes.filter(
       (recipe) =>
         recipe.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -46,8 +43,7 @@ const searchRecipes = async (search) => {
 
 const getRecipeById = async (id) => {
   try {
-    const data = await fs.promises.readFile("./data/recipes.json");
-    const recipes = JSON.parse(data);
+    const recipes = await getRecipes();
     return recipes.find((recipe) => recipe.id === id);
   } catch (error) {
     return [];
@@ -61,8 +57,7 @@ const addRecipe = async (recipe) => {
     createdAt: new Date().toISOString(),
   };
   try {
-    const data = await fs.promises.readFile("./data/recipes.json");
-    const recipes = JSON.parse(data);
+    const recipes = await getRecipes();
     recipes.push(newRecipe);
     await fs.promises.writeFile("./data/recipes.json", JSON.stringify(recipes));
     return newRecipe;

@@ -1,1 +1,108 @@
-[{"id":"Asw1!Q$","title":"Classic Pasta alla Rose","description":"A rich and velvety pasta dish featuring a perfect blend of tomato sauce and heavy cream.","ingredients":["500g Pasta (Penne or Fusilli)","250ml Cooking cream","400g Crushed tomatoes","3 Garlic cloves, minced","2 tbsp Olive oil","1 tsp Salt, 1/2 tsp Black pepper","Fresh basil leaves for garnish"],"instructions":["Cook the pasta in boiling salted water according to package instructions and drain.","Heat olive oil in a large skillet and lightly sauté the garlic.","Add crushed tomatoes, bring to a boil, and simmer for about 5 minutes.","Stir in the cooking cream and spices until the sauce reaches a uniform orange color.","Toss the cooked pasta into the sauce, mix for one minute, and serve with fresh basil."],"cookingTime":20,"servings":4,"difficulty":"easy","rating":4.8,"createdAt":"2026-02-26T09:00:00.000Z"},{"id":"A3x0@Q$","title":"Warm Halloumi & Mushroom Salad","description":"A fresh salad topped with seared halloumi cheese and mushrooms sautéed in teriyaki sauce.","ingredients":["200g Halloumi cheese, cubed","1 basket Fresh champignons, sliced","1 head of Lettuce, torn","2 Cucumbers, 10 Cherry tomatoes","1/2 Red onion, sliced","3 tbsp Teriyaki sauce","Sesame seeds for garnish"],"instructions":["Place the lettuce, cucumbers, tomatoes, and onion in a large salad bowl.","In a hot pan with a little oil, fry the halloumi cubes until golden brown on all sides, then remove.","Sauté the mushrooms in the same pan for about 3 minutes.","Return the halloumi to the pan, add the teriyaki sauce, and toss quickly for 30 seconds to coat.","Pour the warm pan contents over the fresh vegetables, sprinkle with sesame seeds, and serve immediately."],"cookingTime":15,"servings":2,"difficulty":"medium","rating":4.7,"createdAt":"2026-02-26T09:30:00.000Z"},{"id":"hqA3qqVL_YE5S5-HgmN6H","title":"Beef Wellington Bites","description":"A sophisticated appetizer featuring tender beef fillet wrapped in mushroom duxelles and flaky puff pastry.","ingredients":["400g Beef tenderloin, cut into chunks","250g Puff pastry sheet","200g Mushrooms, finely minced","1 Shallot, finely chopped","2 tbsp English mustard","4 slices of Prosciutto","1 Egg yolk (for egg wash)","Salt and coarse black pepper"],"instructions":["Sear the beef chunks in a very hot pan for 30 seconds per side until browned but raw inside. Let cool.","In the same pan, sauté minced mushrooms and shallots until all moisture has evaporated (Duxelles).","Lay out plastic wrap, place prosciutto slices, spread the mushroom mixture, and place the beef on top. Roll tightly and chill for 15 minutes.","Wrap the chilled beef rolls in puff pastry, seal the edges, and brush with egg yolk.","Bake at 200°C for 15-20 minutes until the pastry is golden brown. Let rest before serving."],"cookingTime":50,"servings":6,"difficulty":"hard","rating":4.9,"createdAt":"2026-02-26T10:26:32.508Z"},{"title":"Beef Wellington Bites","description":"A sophisticated appetizer featuring tender beef fillet wrapped in mushroom duxelles and flaky puff pastry.","ingredients":["400g Beef tenderloin, cut into chunks","250g Puff pastry sheet","200g Mushrooms, finely minced","1 Shallot, finely chopped","2 tbsp English mustard","4 slices of Prosciutto","1 Egg yolk (for egg wash)","Salt and coarse black pepper"],"instructions":["Sear the beef chunks in a very hot pan for 30 seconds per side until browned but raw inside. Let cool.","In the same pan, sauté minced mushrooms and shallots until all moisture has evaporated (Duxelles).","Lay out plastic wrap, place prosciutto slices, spread the mushroom mixture, and place the beef on top. Roll tightly and chill for 15 minutes.","Wrap the chilled beef rolls in puff pastry, seal the edges, and brush with egg yolk.","Bake at 200°C for 15-20 minutes until the pastry is golden brown. Let rest before serving."],"cookingTime":50,"servings":6,"difficulty":"hard","rating":4.9,"createdAt":"2026-02-26T10:29:28.479Z","id":"DqlPFWI"},{"id":"PAvtndR","title":"Beef Wellington Bites","description":"A sophisticated appetizer featuring tender beef fillet wrapped in mushroom duxelles and flaky puff pastry.","ingredients":["400g Beef tenderloin, cut into chunks","250g Puff pastry sheet","200g Mushrooms, finely minced","1 Shallot, finely chopped","2 tbsp English mustard","4 slices of Prosciutto","1 Egg yolk (for egg wash)","Salt and coarse black pepper"],"instructions":["Sear the beef chunks in a very hot pan for 30 seconds per side until browned but raw inside. Let cool.","In the same pan, sauté minced mushrooms and shallots until all moisture has evaporated (Duxelles).","Lay out plastic wrap, place prosciutto slices, spread the mushroom mixture, and place the beef on top. Roll tightly and chill for 15 minutes.","Wrap the chilled beef rolls in puff pastry, seal the edges, and brush with egg yolk.","Bake at 200°C for 15-20 minutes until the pastry is golden brown. Let rest before serving."],"cookingTime":50,"servings":6,"difficulty":"hard","rating":4.9,"createdAt":"2026-02-26T10:30:30.768Z"}]
+[
+  {
+    "id": "Asw1!Q$",
+    "title": "Classic Pasta alla Rose",
+    "description": "A rich and velvety pasta dish featuring a perfect blend of tomato sauce and heavy cream.",
+    "ingredients": [
+      "500g Pasta (Penne or Fusilli)",
+      "250ml Cooking cream",
+      "400g Crushed tomatoes",
+      "3 Garlic cloves, minced",
+      "2 tbsp Olive oil",
+      "1 tsp Salt, 1/2 tsp Black pepper",
+      "Fresh basil leaves for garnish"
+    ],
+    "instructions": [
+      "Cook the pasta in boiling salted water according to package instructions and drain.",
+      "Heat olive oil in a large skillet and lightly sauté the garlic.",
+      "Add crushed tomatoes, bring to a boil, and simmer for about 5 minutes.",
+      "Stir in the cooking cream and spices until the sauce reaches a uniform orange color.",
+      "Toss the cooked pasta into the sauce, mix for one minute, and serve with fresh basil."
+    ],
+    "cookingTime": 20,
+    "servings": 4,
+    "difficulty": "easy",
+    "rating": 4.8,
+    "createdAt": "2026-02-26T09:00:00.000Z"
+  },
+  {
+    "id": "A3x0@Q$",
+    "title": "Warm Halloumi & Mushroom Salad",
+    "description": "A fresh salad topped with seared halloumi cheese and mushrooms sautéed in teriyaki sauce.",
+    "ingredients": [
+      "200g Halloumi cheese, cubed",
+      "1 basket Fresh champignons, sliced",
+      "1 head of Lettuce, torn",
+      "2 Cucumbers, 10 Cherry tomatoes",
+      "1/2 Red onion, sliced",
+      "3 tbsp Teriyaki sauce",
+      "Sesame seeds for garnish"
+    ],
+    "instructions": [
+      "Place the lettuce, cucumbers, tomatoes, and onion in a large salad bowl.",
+      "In a hot pan with a little oil, fry the halloumi cubes until golden brown on all sides, then remove.",
+      "Sauté the mushrooms in the same pan for about 3 minutes.",
+      "Return the halloumi to the pan, add the teriyaki sauce, and toss quickly for 30 seconds to coat.",
+      "Pour the warm pan contents over the fresh vegetables, sprinkle with sesame seeds, and serve immediately."
+    ],
+    "cookingTime": 15,
+    "servings": 2,
+    "difficulty": "medium",
+    "rating": 4.7,
+    "createdAt": "2026-02-26T09:30:00.000Z"
+  },
+  {
+    "id": "hqA3qqVL_YE5S5-HgmN6H",
+    "title": "Beef Wellington Bites",
+    "description": "A sophisticated appetizer featuring tender beef fillet wrapped in mushroom duxelles and flaky puff pastry.",
+    "ingredients": [
+      "400g Beef tenderloin, cut into chunks",
+      "250g Puff pastry sheet",
+      "200g Mushrooms, finely minced",
+      "1 Shallot, finely chopped",
+      "2 tbsp English mustard",
+      "4 slices of Prosciutto",
+      "1 Egg yolk (for egg wash)",
+      "Salt and coarse black pepper"
+    ],
+    "instructions": [
+      "Sear the beef chunks in a very hot pan for 30 seconds per side until browned but raw inside. Let cool.",
+      "In the same pan, sauté minced mushrooms and shallots until all moisture has evaporated (Duxelles).",
+      "Lay out plastic wrap, place prosciutto slices, spread the mushroom mixture, and place the beef on top. Roll tightly and chill for 15 minutes.",
+      "Wrap the chilled beef rolls in puff pastry, seal the edges, and brush with egg yolk.",
+      "Bake at 200°C for 15-20 minutes until the pastry is golden brown. Let rest before serving."
+    ],
+    "cookingTime": 50,
+    "servings": 6,
+    "difficulty": "hard",
+    "rating": 4.9,
+    "createdAt": "2026-02-26T10:26:32.508Z"
+  },
+  {
+    "title": "Beef Wellington Bites",
+    "description": "A sophisticated appetizer featuring tender beef fillet wrapped in mushroom duxelles and flaky puff pastry.",
+    "ingredients": [
+      "400g Beef tenderloin, cut into chunks",
+      "250g Puff pastry sheet",
+      "200g Mushrooms, finely minced",
+      "1 Shallot, finely chopped",
+      "2 tbsp English mustard",
+      "4 slices of Prosciutto",
+      "1 Egg yolk (for egg wash)",
+      "Salt and coarse black pepper"
+    ],
+    "instructions": [
+      "Sear the beef chunks in a very hot pan for 30 seconds per side until browned but raw inside. Let cool.",
+      "In the same pan, sauté minced mushrooms and shallots until all moisture has evaporated (Duxelles).",
+      "Lay out plastic wrap, place prosciutto slices, spread the mushroom mixture, and place the beef on top. Roll tightly and chill for 15 minutes.",
+      "Wrap the chilled beef rolls in puff pastry, seal the edges, and brush with egg yolk.",
+      "Bake at 200°C for 15-20 minutes until the pastry is golden brown. Let rest before serving."
+    ],
+    "cookingTime": 50,
+    "servings": 6,
+    "difficulty": "hard",
+    "rating": 4.9,
+    "createdAt": "2026-02-26T10:29:28.479Z",
+    "id": "DqlPFWI"
+  }
+]
