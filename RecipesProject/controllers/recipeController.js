@@ -68,10 +68,20 @@ const getRecipeById = async (req, res) => {
   }
 };
 
+const addRecipe = async (req, res) => {
+  try {
+    const recipe = await recipesModel.addRecipe(req.body);
+    res.status(201).json(recipe);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export default {
   getRecipes,
   getRecipeByDifficulty,
   getRecipeByMaxCookingTime,
   searchRecipes,
   getRecipeById,
+  addRecipe,
 };

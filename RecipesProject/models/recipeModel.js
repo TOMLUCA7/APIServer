@@ -53,10 +53,23 @@ const getRecipeById = async (id) => {
   }
 };
 
+const addRecipe = async (recipe) => {
+  try {
+    const data = await fs.promises.readFile("./data/recipes.json");
+    const recipes = JSON.parse(data);
+    recipes.push(recipe);
+    await fs.promises.writeFile("./data/recipes.json", JSON.stringify(recipes));
+    return recipe;
+  } catch (error) {
+    return [];
+  }
+};
+
 export default {
   getRecipes,
   getRecipeByDifficulty,
   getRecipeByMaxCookingTime,
   searchRecipes,
   getRecipeById,
+  addRecipe,
 };
