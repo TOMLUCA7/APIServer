@@ -1,10 +1,11 @@
 import fs from "fs";
 import { nanoid } from "nanoid";
+import pool from "../db.js";
 
 const getRecipes = async () => {
   try {
-    const data = await fs.promises.readFile("./data/recipes.json");
-    return JSON.parse(data);
+    const [data] = await pool.query("SELECT * FROM recipes");
+    return data;
   } catch (error) {
     return [];
   }
@@ -12,8 +13,11 @@ const getRecipes = async () => {
 
 const getRecipeByDifficulty = async (difficulty) => {
   try {
-    const recipes = await getRecipes();
-    return recipes.filter((recipe) => recipe.difficulty === difficulty);
+    const [data] = await pool.query(
+      "SELECT * FROM recipes WHERE difficulty = ?",
+      [difficulty],
+    );
+    return data;
   } catch (error) {
     return [];
   }
