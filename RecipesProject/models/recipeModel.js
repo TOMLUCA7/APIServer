@@ -76,16 +76,22 @@ const addRecipe = async (recipe) => {
   }
 };
 
+// TODO: fix update recipe
 const updateRecipe = async (id, recipe) => {
   try {
-    const recipes = await getRecipes();
-    const recipeIndex = recipes.findIndex((recipe) => recipe.id === id);
+    const [data] = await pool.query("SELECT * FROM recipes WHERE id = ?", [id]);
+    const recipeIndex = data.findIndex((recipe) => recipe.id === id);
     if (recipeIndex === -1) {
       return null;
     }
-    recipes[recipeIndex] = { ...recipes[recipeIndex], ...recipe };
-    await fs.promises.writeFile("./data/recipes.json", JSON.stringify(recipes));
-    return recipes[recipeIndex];
+    data[recipeIndex] = { ...data[recipeIndex], ...recipe };
+    const recipeForDb = {
+      ...data[recipeIndex],
+      ingredients: JSON.stringify(data[recipeIndex].ingredients),
+      instructions: JSON.stringify(data[recipeIndex].instructions),
+    };
+    await pool.query("UPDATE recipes SET ? WHERE id = ?", [recipeForDb, id]);
+    return data[recipeIndex];
   } catch (error) {
     return null;
   }
