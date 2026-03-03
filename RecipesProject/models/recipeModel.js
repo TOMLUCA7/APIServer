@@ -57,16 +57,22 @@ const getRecipeById = async (id) => {
 };
 
 const addRecipe = async (recipe) => {
+  const createdAt = new Date().toISOString().slice(0, 19).replace("T", " ");
   const newRecipe = {
     ...recipe,
     id: nanoid(7),
-    createdAt: new Date().toISOString(),
+    createdAt,
   };
   try {
-    const [data] = await pool.query("INSERT INTO recipes SET ?", newRecipe);
+    const recipeForDb = {
+      ...newRecipe,
+      ingredients: JSON.stringify(newRecipe.ingredients),
+      instructions: JSON.stringify(newRecipe.instructions),
+    };
+    const [data] = await pool.query("INSERT INTO recipes SET ?", recipeForDb);
     return data;
   } catch (error) {
-    return null;
+    throw error;
   }
 };
 
