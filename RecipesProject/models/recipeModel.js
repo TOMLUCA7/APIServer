@@ -76,22 +76,26 @@ const addRecipe = async (recipe) => {
   }
 };
 
-// TODO: fix update recipe
 const updateRecipe = async (id, recipe) => {
   try {
-    const [data] = await pool.query("SELECT * FROM recipes WHERE id = ?", [id]);
-    const recipeIndex = data.findIndex((recipe) => recipe.id === id);
-    if (recipeIndex === -1) {
+    const updateData = { ...recipe };
+    if (updateData.ingredients) {
+      updateData.ingredients = JSON.stringify(updateData.ingredients);
+    }
+    if (updateData.instructions) {
+      updateData.instructions = JSON.stringify(updateData.instructions);
+    }
+
+    const [result] = await pool.query("UPDATE recipes SET ? WHERE id = ?", [
+      updateData,
+      id,
+    ]);
+
+    if (result.affectedRows === 0) {
       return null;
     }
-    data[recipeIndex] = { ...data[recipeIndex], ...recipe };
-    const recipeForDb = {
-      ...data[recipeIndex],
-      ingredients: JSON.stringify(data[recipeIndex].ingredients),
-      instructions: JSON.stringify(data[recipeIndex].instructions),
-    };
-    await pool.query("UPDATE recipes SET ? WHERE id = ?", [recipeForDb, id]);
-    return data[recipeIndex];
+    const [data] = await pool.query("SELECT * FROM recipes WHERE id = ?", [id]);
+    return data[0];
   } catch (error) {
     return null;
   }
@@ -99,13 +103,11 @@ const updateRecipe = async (id, recipe) => {
 
 const deleteRecipe = async (id) => {
   try {
-    const recipes = await getRecipes();
-    const recipeIndex = recipes.findIndex((recipe) => recipe.id === id);
-    if (recipeIndex === -1) {
+    const [data] = await pool.query("SELECT * FROM recipes WHERE id = ?", [id]);
+    if (data.length === 0) {
       return null;
     }
-    recipes.splice(recipeIndex, 1);
-    await fs.promises.writeFile("./data/recipes.json", JSON.stringify(recipes));
+    await pool.query("DELETE FROM recipes WHERE id = ?", [id]);
     return true;
   } catch (error) {
     return null;
@@ -113,29 +115,31 @@ const deleteRecipe = async (id) => {
 };
 
 const getStatistics = async () => {
-  const recipesByDifficulty = {};
-  let totalCookingTime = 0;
   try {
-    const recipes = await getRecipes();
+    const [totalsRows] = await pool.query(
+      "SELECT COUNT(*) AS totalRecipes, AVG(cookingTime) AS averageCookingTime FROM recipes",
+    );
+    const [difficultyRows] = await pool.query(
+      "SELECT difficulty, COUNT(*) AS count FROM recipes GROUP BY difficulty",
+    );
 
-    recipes.forEach((recipe) => {
-      const diff = recipe.difficulty;
+    const recipesByDifficulty = {
+      easy: 0,
+      medium: 0,
+      hard: 0,
+    };
 
-      if (!recipesByDifficulty[diff]) {
-        recipesByDifficulty[diff] = 0;
-      }
-      recipesByDifficulty[diff]++;
+    difficultyRows.forEach((row) => {
+      recipesByDifficulty[row.difficulty] = row.count;
     });
 
-    for (const recipe of recipes) {
-      totalCookingTime += recipe.cookingTime;
-    }
-
-    const averageCookingTime =
-      recipes.length > 0 ? totalCookingTime / recipes.length : 0;
+    const totalRecipes = totalsRows[0].totalRecipes ?? 0;
+    const averageCookingTime = totalsRows[0].averageCookingTime
+      ? Number(totalsRows[0].averageCookingTime)
+      : 0;
 
     return {
-      totalRecipes: recipes.length,
+      totalRecipes,
       recipesByDifficulty,
       averageCookingTime,
     };
