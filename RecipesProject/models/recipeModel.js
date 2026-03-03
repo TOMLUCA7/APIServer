@@ -1,4 +1,3 @@
-import fs from "fs";
 import { nanoid } from "nanoid";
 import pool from "../db.js";
 
