@@ -25,8 +25,11 @@ const getRecipeByDifficulty = async (difficulty) => {
 
 const getRecipeByMaxCookingTime = async (maxCookingTime) => {
   try {
-    const recipes = await getRecipes();
-    return recipes.filter((recipe) => recipe.cookingTime <= maxCookingTime);
+    const [data] = await pool.query(
+      "SELECT * FROM recipes WHERE cookingTime <= ?",
+      [maxCookingTime],
+    );
+    return data;
   } catch (error) {
     return [];
   }
@@ -34,12 +37,11 @@ const getRecipeByMaxCookingTime = async (maxCookingTime) => {
 
 const searchRecipes = async (search) => {
   try {
-    const recipes = await getRecipes();
-    return recipes.filter(
-      (recipe) =>
-        recipe.title.toLowerCase().includes(search.toLowerCase()) ||
-        recipe.description.toLowerCase().includes(search.toLowerCase()),
+    const [data] = await pool.query(
+      "SELECT * FROM recipes WHERE title LIKE ? OR description LIKE ?",
+      [`%${search}%`, `%${search}%`],
     );
+    return data;
   } catch (error) {
     return [];
   }
