@@ -2,6 +2,7 @@ import express from "express";
 import { logger } from "./middlewares/logger.js";
 import cors from "cors";
 import recipeRouter from "./routes/recipeRoutes.js";
+import "./db.js";
 
 const app = express();
 const PORT = 3000;
@@ -29,5 +30,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT} `);
 });
