@@ -49,8 +49,8 @@ const searchRecipes = async (search) => {
 
 const getRecipeById = async (id) => {
   try {
-    const recipes = await getRecipes();
-    return recipes.find((recipe) => recipe.id === id);
+    const [data] = await pool.query("SELECT * FROM recipes WHERE id = ?", [id]);
+    return data;
   } catch (error) {
     return [];
   }
@@ -63,10 +63,8 @@ const addRecipe = async (recipe) => {
     createdAt: new Date().toISOString(),
   };
   try {
-    const recipes = await getRecipes();
-    recipes.push(newRecipe);
-    await fs.promises.writeFile("./data/recipes.json", JSON.stringify(recipes));
-    return newRecipe;
+    const [data] = await pool.query("INSERT INTO recipes SET ?", newRecipe);
+    return data;
   } catch (error) {
     return null;
   }
