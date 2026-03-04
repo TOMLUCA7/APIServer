@@ -4,7 +4,7 @@ import User from "../models/userModel.js";
 import dotenv from "dotenv";
 dotenv.config();
 
-const register = async (req, res) => {
+export const register = async (req, res) => {
   const { username, email, password } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10); // hash password
@@ -15,7 +15,7 @@ const register = async (req, res) => {
   }
 };
 
-const login = async (req, res) => {
+export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findByEmail(email);
@@ -34,9 +34,4 @@ const login = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
-
-export default {
-  register,
-  login,
 };
