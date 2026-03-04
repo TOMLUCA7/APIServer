@@ -2,6 +2,7 @@ import express from "express";
 import { logger } from "./middlewares/logger.js";
 import cors from "cors";
 import recipeRouter from "./routes/recipeRoutes.js";
+import authRouter from "./routes/authRoutes.js";
 import "./db.js";
 
 const app = express();
@@ -16,6 +17,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!, this is recipe API");
 });
 
+app.use("/auth", authRouter);
 app.use("/recipes", recipeRouter);
 
 app.all(/^(.*)$/, (req, res) => {
