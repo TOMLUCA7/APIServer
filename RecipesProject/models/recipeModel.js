@@ -25,7 +25,7 @@ const getRecipeByDifficulty = async (difficulty) => {
 const getRecipeByMaxCookingTime = async (maxCooking_time) => {
   try {
     const result = await pool.query(
-      "SELECT * FROM recipes WHERE cooking_time <= $1",
+      "SELECT * FROM recipes WHERE cooking_time = $1",
       [maxCooking_time],
     );
     return result.rows;
