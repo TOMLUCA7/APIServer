@@ -20,7 +20,7 @@ const recipeSchema = {
     servings: { type: "number", minimum: 1, maximum: 1000 },
     difficulty: { type: "string", enum: ["easy", "medium", "hard"] },
     rating: { type: "number", minimum: 1, maximum: 5 },
-    created_at: { type: "string", format: "date-time" },
+    created_at: { type: "string" },
   },
   required: [
     "title",

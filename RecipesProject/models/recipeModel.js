@@ -61,7 +61,7 @@ const addRecipe = async (recipe) => {
   const newRecipe = {
     ...recipe,
     id: nanoid(7),
-    created_at: new Date().toISOString(),
+    created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
   };
   try {
     const recipeForDb = {
@@ -129,7 +129,7 @@ const deleteRecipe = async (id) => {
 const getStatistics = async () => {
   try {
     const totalsResult = await pool.query(
-      "SELECT COUNT(*) AS totalRecipes, AVG(cookingTime) AS averageCookingTime FROM recipes",
+      'SELECT COUNT(*) AS "totalRecipes", AVG(cooking_time) AS "averageCookingTime" FROM recipes',
     );
     const difficultyResult = await pool.query(
       "SELECT difficulty, COUNT(*) AS count FROM recipes GROUP BY difficulty",
@@ -145,9 +145,9 @@ const getStatistics = async () => {
       recipesByDifficulty[row.difficulty] = Number(row.count);
     });
 
-    const totalRecipes = Number(totalsResult.rows[0].totalrecipes) || 0;
-    const averageCookingTime = totalsResult.rows[0].averagecookingtime
-      ? Number(totalsResult.rows[0].averagecookingtime)
+    const totalRecipes = Number(totalsResult.rows[0].totalRecipes) || 0;
+    const averageCookingTime = totalsResult.rows[0].averageCookingTime
+      ? Number(totalsResult.rows[0].averageCookingTime)
       : 0;
 
     return {
