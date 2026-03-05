@@ -3,8 +3,8 @@ import pool from "../db.js";
 
 const getRecipes = async () => {
   try {
-    const [data] = await pool.query("SELECT * FROM recipes");
-    return data;
+    const result = await pool.query("SELECT * FROM recipes");
+    return result.rows;
   } catch (error) {
     return [];
   }
@@ -12,11 +12,11 @@ const getRecipes = async () => {
 
 const getRecipeByDifficulty = async (difficulty) => {
   try {
-    const [data] = await pool.query(
-      "SELECT * FROM recipes WHERE difficulty = ?",
+    const result = await pool.query(
+      "SELECT * FROM recipes WHERE difficulty = $1",
       [difficulty],
     );
-    return data;
+    return result.rows;
   } catch (error) {
     return [];
   }
@@ -24,11 +24,11 @@ const getRecipeByDifficulty = async (difficulty) => {
 
 const getRecipeByMaxCookingTime = async (maxCookingTime) => {
   try {
-    const [data] = await pool.query(
-      "SELECT * FROM recipes WHERE cookingTime <= ?",
+    const result = await pool.query(
+      "SELECT * FROM recipes WHERE cookingTime <= $1",
       [maxCookingTime],
     );
-    return data;
+    return result.rows;
   } catch (error) {
     return [];
   }
@@ -36,11 +36,11 @@ const getRecipeByMaxCookingTime = async (maxCookingTime) => {
 
 const searchRecipes = async (search) => {
   try {
-    const [data] = await pool.query(
-      "SELECT * FROM recipes WHERE title LIKE ? OR description LIKE ?",
+    const result = await pool.query(
+      "SELECT * FROM recipes WHERE title LIKE $1 OR description LIKE $2",
       [`%${search}%`, `%${search}%`],
     );
-    return data;
+    return result.rows;
   } catch (error) {
     return [];
   }
@@ -48,15 +48,17 @@ const searchRecipes = async (search) => {
 
 const getRecipeById = async (id) => {
   try {
-    const [data] = await pool.query("SELECT * FROM recipes WHERE id = ?", [id]);
-    return data;
+    const result = await pool.query("SELECT * FROM recipes WHERE id = $1", [
+      id,
+    ]);
+    return result.rows;
   } catch (error) {
     return [];
   }
 };
 
 const addRecipe = async (recipe) => {
-  const createdAt = new Date().toISOString().slice(0, 19).replace("T", " ");
+  const createdAt = new Date().toISOString();
   const newRecipe = {
     ...recipe,
     id: nanoid(7),
@@ -68,8 +70,20 @@ const addRecipe = async (recipe) => {
       ingredients: JSON.stringify(newRecipe.ingredients),
       instructions: JSON.stringify(newRecipe.instructions),
     };
-    const [data] = await pool.query("INSERT INTO recipes SET ?", recipeForDb);
-    return data;
+    const result = await pool.query(
+      "INSERT INTO recipes (id, title, description, cookingTime, difficulty, ingredients, instructions, createdAt) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
+      [
+        recipeForDb.id,
+        recipeForDb.title,
+        recipeForDb.description,
+        recipeForDb.cookingTime,
+        recipeForDb.difficulty,
+        recipeForDb.ingredients,
+        recipeForDb.instructions,
+        recipeForDb.createdAt,
+      ],
+    );
+    return result.rows[0];
   } catch (error) {
     throw error;
   }
@@ -85,29 +99,29 @@ const updateRecipe = async (id, recipe) => {
       updateData.instructions = JSON.stringify(updateData.instructions);
     }
 
-    const [result] = await pool.query("UPDATE recipes SET ? WHERE id = ?", [
-      updateData,
-      id,
-    ]);
+    const fields = Object.keys(updateData);
+    const values = Object.values(updateData);
+    const setClause = fields
+      .map((field, index) => `${field} = $${index + 1}`)
+      .join(", ");
+    values.push(id);
 
-    if (result.affectedRows === 0) {
-      return null;
-    }
-    const [data] = await pool.query("SELECT * FROM recipes WHERE id = ?", [id]);
-    return data[0];
+    const result = await pool.query(
+      `UPDATE recipes SET ${setClause} WHERE id = $${values.length} RETURNING *`,
+      values,
+    );
+
+    return result.rows[0] || null;
   } catch (error) {
+    console.error("Update error:", error);
     return null;
   }
 };
 
 const deleteRecipe = async (id) => {
   try {
-    const [data] = await pool.query("SELECT * FROM recipes WHERE id = ?", [id]);
-    if (data.length === 0) {
-      return null;
-    }
-    await pool.query("DELETE FROM recipes WHERE id = ?", [id]);
-    return true;
+    const result = await pool.query("DELETE FROM recipes WHERE id = $1", [id]);
+    return result.rowCount > 0;
   } catch (error) {
     return null;
   }
@@ -115,10 +129,10 @@ const deleteRecipe = async (id) => {
 
 const getStatistics = async () => {
   try {
-    const [totalsRows] = await pool.query(
+    const totalsResult = await pool.query(
       "SELECT COUNT(*) AS totalRecipes, AVG(cookingTime) AS averageCookingTime FROM recipes",
     );
-    const [difficultyRows] = await pool.query(
+    const difficultyResult = await pool.query(
       "SELECT difficulty, COUNT(*) AS count FROM recipes GROUP BY difficulty",
     );
 
@@ -128,13 +142,13 @@ const getStatistics = async () => {
       hard: 0,
     };
 
-    difficultyRows.forEach((row) => {
-      recipesByDifficulty[row.difficulty] = row.count;
+    difficultyResult.rows.forEach((row) => {
+      recipesByDifficulty[row.difficulty] = Number(row.count);
     });
 
-    const totalRecipes = totalsRows[0].totalRecipes ?? 0;
-    const averageCookingTime = totalsRows[0].averageCookingTime
-      ? Number(totalsRows[0].averageCookingTime)
+    const totalRecipes = Number(totalsResult.rows[0].totalrecipes) || 0;
+    const averageCookingTime = totalsResult.rows[0].averagecookingtime
+      ? Number(totalsResult.rows[0].averagecookingtime)
       : 0;
 
     return {
