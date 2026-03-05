@@ -22,11 +22,11 @@ const getRecipeByDifficulty = async (difficulty) => {
   }
 };
 
-const getRecipeByMaxCookingTime = async (maxCookingTime) => {
+const getRecipeByMaxCookingTime = async (maxCooking_time) => {
   try {
     const result = await pool.query(
-      "SELECT * FROM recipes WHERE cookingTime <= $1",
-      [maxCookingTime],
+      "SELECT * FROM recipes WHERE cooking_time <= $1",
+      [maxCooking_time],
     );
     return result.rows;
   } catch (error) {
@@ -58,11 +58,10 @@ const getRecipeById = async (id) => {
 };
 
 const addRecipe = async (recipe) => {
-  const createdAt = new Date().toISOString();
   const newRecipe = {
     ...recipe,
     id: nanoid(7),
-    createdAt,
+    created_at: new Date().toISOString(),
   };
   try {
     const recipeForDb = {
@@ -71,16 +70,16 @@ const addRecipe = async (recipe) => {
       instructions: JSON.stringify(newRecipe.instructions),
     };
     const result = await pool.query(
-      "INSERT INTO recipes (id, title, description, cookingTime, difficulty, ingredients, instructions, createdAt) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
+      "INSERT INTO recipes (id, title, description, cooking_time, difficulty, ingredients, instructions, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
       [
         recipeForDb.id,
         recipeForDb.title,
         recipeForDb.description,
-        recipeForDb.cookingTime,
+        recipeForDb.cooking_time,
         recipeForDb.difficulty,
         recipeForDb.ingredients,
         recipeForDb.instructions,
-        recipeForDb.createdAt,
+        recipeForDb.created_at,
       ],
     );
     return result.rows[0];
