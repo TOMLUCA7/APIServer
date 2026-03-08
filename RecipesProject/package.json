@@ -23,6 +23,10 @@
     "mysql2": "^3.18.2",
     "nanoid": "^5.1.6",
     "pg": "^8.20.0",
+    "sequelize": "^6.37.8",
     "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.5"
   }
 }
