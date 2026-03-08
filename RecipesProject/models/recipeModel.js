@@ -1,4 +1,4 @@
-import { nanoid } from "nanoid";
+import { randomUUID } from "crypto";
 import sequelize from "../db.js";
 
 const getRecipes = async () => {
@@ -22,11 +22,11 @@ const getRecipeByDifficulty = async (difficulty) => {
   }
 };
 
-const getRecipeByMaxCookingTime = async (maxCooking_time) => {
+const getRecipeByMaxCookingTime = async (maxCookingTime) => {
   try {
     const [result] = await sequelize.query(
-      "SELECT * FROM recipes WHERE cooking_time = :maxCooking_time",
-      { replacements: { maxCooking_time } },
+      'SELECT * FROM recipes WHERE "cookingTime" = :maxCookingTime',
+      { replacements: { maxCookingTime } },
     );
     return result;
   } catch (error) {
@@ -60,10 +60,13 @@ const getRecipeById = async (id) => {
 };
 
 const addRecipe = async (recipe) => {
+  const now = new Date().toISOString();
   const newRecipe = {
     ...recipe,
-    id: nanoid(7),
-    created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
+    id: recipe.id ?? randomUUID(),
+    createdAt: recipe.createdAt ?? now,
+    updatedAt: recipe.updatedAt ?? now,
+    isPublic: recipe.isPublic ?? true,
   };
   try {
     const recipeForDb = {
@@ -72,39 +75,26 @@ const addRecipe = async (recipe) => {
       instructions: JSON.stringify(newRecipe.instructions),
     };
     const [result] = await sequelize.query(
-      `INSERT INTO recipes (
-        id,
-        title,
-        description,
-        cooking_time,
-        difficulty,
-        ingredients,
-        instructions,
-        created_at
-      ) VALUES (
-        :id,
-        :title,
-        :description,
-        :cooking_time,
-        :difficulty,
-        :ingredients,
-        :instructions,
-        :created_at
-      ) RETURNING *`,
+      'INSERT INTO recipes (id, title, description, ingredients, instructions, "cookingTime", servings, difficulty, "imageUrl", "isPublic", "userId", "createdAt", "updatedAt") VALUES (:id, :title, :description, :ingredients, :instructions, :cookingTime, :servings, :difficulty, :imageUrl, :isPublic, :userId, :createdAt, :updatedAt) RETURNING *',
       {
         replacements: {
           id: recipeForDb.id,
           title: recipeForDb.title,
           description: recipeForDb.description,
-          cooking_time: recipeForDb.cooking_time,
-          difficulty: recipeForDb.difficulty,
           ingredients: recipeForDb.ingredients,
           instructions: recipeForDb.instructions,
-          created_at: recipeForDb.created_at,
+          cookingTime: recipeForDb.cookingTime,
+          servings: recipeForDb.servings,
+          difficulty: recipeForDb.difficulty,
+          imageUrl: recipeForDb.imageUrl,
+          isPublic: recipeForDb.isPublic,
+          userId: recipeForDb.userId,
+          createdAt: recipeForDb.createdAt,
+          updatedAt: recipeForDb.updatedAt,
         },
       },
     );
-    return result[0];
+    return result[0] ?? null;
   } catch (error) {
     throw error;
   }
@@ -119,6 +109,8 @@ const updateRecipe = async (id, recipe) => {
     if (updateData.instructions) {
       updateData.instructions = JSON.stringify(updateData.instructions);
     }
+
+    updateData.updatedAt = new Date().toISOString();
 
     const fields = Object.keys(updateData);
     if (fields.length === 0) {
@@ -157,7 +149,7 @@ const deleteRecipe = async (id) => {
 const getStatistics = async () => {
   try {
     const [totalsResult] = await sequelize.query(
-      'SELECT COUNT(*) AS "totalRecipes", AVG(cooking_time) AS "averageCookingTime" FROM recipes',
+      'SELECT COUNT(*) AS "totalRecipes", AVG("cookingTime") AS "averageCookingTime" FROM recipes',
     );
     const [difficultyResult] = await sequelize.query(
       "SELECT difficulty, COUNT(*) AS count FROM recipes GROUP BY difficulty",

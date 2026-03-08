@@ -70,7 +70,15 @@ const getRecipeById = async (req, res) => {
 
 const addRecipe = async (req, res) => {
   try {
-    const recipe = await recipesModel.addRecipe(req.body);
+    const timestamp = new Date().toISOString();
+    const recipePayload = {
+      ...req.body,
+      userId: req.user?.id ?? req.body.userId,
+      createdAt: timestamp,
+      updatedAt: timestamp,
+      isPublic: req.body.isPublic ?? true,
+    };
+    const recipe = await recipesModel.addRecipe(recipePayload);
     if (!recipe) {
       return res.status(400).json({ error: "Failed to add recipe" });
     }
