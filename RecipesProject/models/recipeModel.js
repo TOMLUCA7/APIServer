@@ -1,11 +1,14 @@
 import { nanoid } from "nanoid";
-import pool from "../db.js";
+import sequelize from "../db.js";
 
 const getRecipes = async () => {
   try {
-    const result = await pool.query("SELECT * FROM recipes");
-    return result.rows;
+    const result = await sequelize.query("SELECT * FROM recipes", {
+      type: sequelize.QueryTypes.SELECT, // מבטיח שחזור רק מערך הנתונים
+    });
+    return result;
   } catch (error) {
+    console.error("Error fetching recipes:", error);
     return [];
   }
 };
