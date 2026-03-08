@@ -3,6 +3,7 @@ import { logger } from "./middlewares/logger.js";
 import cors from "cors";
 import recipeRouter from "./routes/recipeRoutes.js";
 import authRouter from "./routes/authRoutes.js";
+import "./db.js";
 
 const app = express();
 const PORT = 3000;

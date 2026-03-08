@@ -1,14 +1,12 @@
 import { nanoid } from "nanoid";
 import sequelize from "../db.js";
+import { QueryTypes } from "sequelize";
 
 const getRecipes = async () => {
   try {
-    const result = await sequelize.query("SELECT * FROM recipes", {
-      type: sequelize.QueryTypes.SELECT, // מבטיח שחזור רק מערך הנתונים
-    });
-    return result;
+    const [results, metadata] = await sequelize.query("SELECT * FROM test_1");
+    return results[0];
   } catch (error) {
-    console.error("Error fetching recipes:", error);
     return [];
   }
 };
