@@ -20,7 +20,18 @@ export const register = async (req, res) => {
       firstName,
       lastName,
     ); // create user
-    res.status(201).json({ message: "User created!", user });
+    res.status(201).json({
+      success: true,
+      status: 201,
+      message: "User created!",
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      },
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -41,7 +52,20 @@ export const login = async (req, res) => {
       process.env.JWT_SECRET || "secret_key",
       { expiresIn: "12h" },
     ); // create token
-    res.json({ message: "Login successful", token });
+
+    res.json({
+      success: true,
+      status: 200,
+      message: "Login successful",
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      },
+      token,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
