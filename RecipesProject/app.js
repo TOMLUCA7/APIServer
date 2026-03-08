@@ -4,8 +4,6 @@ import cors from "cors";
 import recipeRouter from "./routes/recipeRoutes.js";
 import authRouter from "./routes/authRoutes.js";
 
-import sequelize from "./db.js";
-
 const app = express();
 const PORT = 3000;
 
@@ -32,16 +30,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-const testConnection = async () => {
-  try {
-    await sequelize.authenticate();
-    console.log("✅ Database connection established successfully.");
-  } catch (error) {
-    console.error("❌ Unable to connect to database:", error);
-  }
-};
-
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT} `);
-  testConnection();
 });
