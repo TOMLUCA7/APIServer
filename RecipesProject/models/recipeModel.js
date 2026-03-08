@@ -72,7 +72,25 @@ const addRecipe = async (recipe) => {
       instructions: JSON.stringify(newRecipe.instructions),
     };
     const [result] = await sequelize.query(
-      "INSERT INTO recipes (id, title, description, cooking_time, difficulty, ingredients, instructions, created_at) VALUES (:id, :title, :description, :cooking_time, :difficulty, :ingredients, :instructions, :created_at) RETURNING *",
+      `INSERT INTO recipes (
+        id,
+        title,
+        description,
+        cooking_time,
+        difficulty,
+        ingredients,
+        instructions,
+        created_at
+      ) VALUES (
+        :id,
+        :title,
+        :description,
+        :cooking_time,
+        :difficulty,
+        :ingredients,
+        :instructions,
+        :created_at
+      ) RETURNING *`,
       {
         replacements: {
           id: recipeForDb.id,
