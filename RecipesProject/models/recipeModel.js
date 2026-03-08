@@ -1,11 +1,10 @@
 import { nanoid } from "nanoid";
 import sequelize from "../db.js";
-import { QueryTypes } from "sequelize";
 
 const getRecipes = async () => {
   try {
-    const [results, metadata] = await sequelize.query("SELECT * FROM test_1");
-    return results[0];
+    const [results] = await sequelize.query("SELECT * FROM recipes");
+    return results;
   } catch (error) {
     return [];
   }
@@ -13,11 +12,11 @@ const getRecipes = async () => {
 
 const getRecipeByDifficulty = async (difficulty) => {
   try {
-    const result = await pool.query(
-      "SELECT * FROM recipes WHERE difficulty = $1",
-      [difficulty],
+    const [result] = await sequelize.query(
+      "SELECT * FROM recipes WHERE difficulty = :difficulty",
+      { replacements: { difficulty } },
     );
-    return result.rows;
+    return result;
   } catch (error) {
     return [];
   }
@@ -25,11 +24,11 @@ const getRecipeByDifficulty = async (difficulty) => {
 
 const getRecipeByMaxCookingTime = async (maxCooking_time) => {
   try {
-    const result = await pool.query(
-      "SELECT * FROM recipes WHERE cooking_time = $1",
-      [maxCooking_time],
+    const [result] = await sequelize.query(
+      "SELECT * FROM recipes WHERE cooking_time = :maxCooking_time",
+      { replacements: { maxCooking_time } },
     );
-    return result.rows;
+    return result;
   } catch (error) {
     return [];
   }
@@ -37,11 +36,12 @@ const getRecipeByMaxCookingTime = async (maxCooking_time) => {
 
 const searchRecipes = async (search) => {
   try {
-    const result = await pool.query(
-      "SELECT * FROM recipes WHERE title LIKE $1 OR description LIKE $2",
-      [`%${search}%`, `%${search}%`],
+    const pattern = `%${search}%`;
+    const [result] = await sequelize.query(
+      "SELECT * FROM recipes WHERE title LIKE :pattern OR description LIKE :pattern",
+      { replacements: { pattern } },
     );
-    return result.rows;
+    return result;
   } catch (error) {
     return [];
   }
@@ -49,10 +49,11 @@ const searchRecipes = async (search) => {
 
 const getRecipeById = async (id) => {
   try {
-    const result = await pool.query("SELECT * FROM recipes WHERE id = $1", [
-      id,
-    ]);
-    return result.rows;
+    const [result] = await sequelize.query(
+      "SELECT * FROM recipes WHERE id = :id",
+      { replacements: { id } },
+    );
+    return result;
   } catch (error) {
     return [];
   }
@@ -70,20 +71,22 @@ const addRecipe = async (recipe) => {
       ingredients: JSON.stringify(newRecipe.ingredients),
       instructions: JSON.stringify(newRecipe.instructions),
     };
-    const result = await pool.query(
-      "INSERT INTO recipes (id, title, description, cooking_time, difficulty, ingredients, instructions, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
-      [
-        recipeForDb.id,
-        recipeForDb.title,
-        recipeForDb.description,
-        recipeForDb.cooking_time,
-        recipeForDb.difficulty,
-        recipeForDb.ingredients,
-        recipeForDb.instructions,
-        recipeForDb.created_at,
-      ],
+    const [result] = await sequelize.query(
+      "INSERT INTO recipes (id, title, description, cooking_time, difficulty, ingredients, instructions, created_at) VALUES (:id, :title, :description, :cooking_time, :difficulty, :ingredients, :instructions, :created_at) RETURNING *",
+      {
+        replacements: {
+          id: recipeForDb.id,
+          title: recipeForDb.title,
+          description: recipeForDb.description,
+          cooking_time: recipeForDb.cooking_time,
+          difficulty: recipeForDb.difficulty,
+          ingredients: recipeForDb.ingredients,
+          instructions: recipeForDb.instructions,
+          created_at: recipeForDb.created_at,
+        },
+      },
     );
-    return result.rows[0];
+    return result[0];
   } catch (error) {
     throw error;
   }
@@ -100,18 +103,21 @@ const updateRecipe = async (id, recipe) => {
     }
 
     const fields = Object.keys(updateData);
-    const values = Object.values(updateData);
-    const setClause = fields
-      .map((field, index) => `${field} = $${index + 1}`)
-      .join(", ");
-    values.push(id);
+    if (fields.length === 0) {
+      return null;
+    }
 
-    const result = await pool.query(
-      `UPDATE recipes SET ${setClause} WHERE id = $${values.length} RETURNING *`,
-      values,
+    const setClause = fields
+      .map((field) => `"${field}" = :${field}`)
+      .join(", ");
+
+    const replacements = { ...updateData, id };
+    const [rows] = await sequelize.query(
+      `UPDATE recipes SET ${setClause} WHERE id = :id RETURNING *`,
+      { replacements },
     );
 
-    return result.rows[0] || null;
+    return rows[0] || null;
   } catch (error) {
     console.error("Update error:", error);
     return null;
@@ -120,8 +126,11 @@ const updateRecipe = async (id, recipe) => {
 
 const deleteRecipe = async (id) => {
   try {
-    const result = await pool.query("DELETE FROM recipes WHERE id = $1", [id]);
-    return result.rowCount > 0;
+    const [result] = await sequelize.query(
+      "DELETE FROM recipes WHERE id = :id RETURNING id",
+      { replacements: { id } },
+    );
+    return result.length > 0;
   } catch (error) {
     return null;
   }
@@ -129,10 +138,10 @@ const deleteRecipe = async (id) => {
 
 const getStatistics = async () => {
   try {
-    const totalsResult = await pool.query(
+    const [totalsResult] = await sequelize.query(
       'SELECT COUNT(*) AS "totalRecipes", AVG(cooking_time) AS "averageCookingTime" FROM recipes',
     );
-    const difficultyResult = await pool.query(
+    const [difficultyResult] = await sequelize.query(
       "SELECT difficulty, COUNT(*) AS count FROM recipes GROUP BY difficulty",
     );
 
@@ -142,13 +151,13 @@ const getStatistics = async () => {
       hard: 0,
     };
 
-    difficultyResult.rows.forEach((row) => {
+    difficultyResult.forEach((row) => {
       recipesByDifficulty[row.difficulty] = Number(row.count);
     });
 
-    const totalRecipes = Number(totalsResult.rows[0].totalRecipes) || 0;
-    const averageCookingTime = totalsResult.rows[0].averageCookingTime
-      ? Number(totalsResult.rows[0].averageCookingTime)
+    const totalRecipes = Number(totalsResult[0]?.totalRecipes) || 0;
+    const averageCookingTime = totalsResult[0]?.averageCookingTime
+      ? Number(totalsResult[0].averageCookingTime)
       : 0;
 
     return {
