@@ -5,11 +5,22 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const register = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, firstName, lastName } = req.body;
+
+  if (!password) {
+    return res.status(400).json({ error: "Password is required" });
+  }
+
   try {
     const hashedPassword = await bcrypt.hash(password, 10); // hash password
-    const userId = await User.create(username, email, hashedPassword); // create user
-    res.status(201).json({ message: "User created!", userId });
+    const user = await User.create(
+      username,
+      email,
+      hashedPassword,
+      firstName,
+      lastName,
+    ); // create user
+    res.status(201).json({ message: "User created!", user });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
