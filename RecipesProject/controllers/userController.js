@@ -33,6 +33,29 @@ const addFavorite = async (req, res) => {
   }
 };
 
+const deleteFavorite = async (req, res) => {
+  try {
+    const { recipeId } = req.params;
+    const userId = req.user.id;
+
+    // Check if favorited
+    const favorited = await favoriteModel.isFavorited(userId, recipeId);
+    if (!favorited) {
+      return res.status(404).json({ error: "Recipe not in favorites" });
+    }
+
+    await favoriteModel.deleteFavorite(userId, recipeId);
+
+    res.status(200).json({
+      success: true,
+      message: "Recipe removed from favorites",
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export default {
   addFavorite,
+  deleteFavorite,
 };

@@ -6,8 +6,19 @@ const addFavorite = async (userId, recipeId) => {
     const id = randomUUID();
     const now = new Date().toISOString();
     const [result] = await sequelize.query(
-      `INSERT INTO user_favorites (id, "userId", "recipeId", "createdAt", "updatedAt")
-       VALUES (:id, :userId, :recipeId, :createdAt, :updatedAt)
+      `INSERT INTO 
+        user_favorites 
+        (id, 
+        "userId", 
+        "recipeId", 
+        "createdAt", 
+        "updatedAt")
+       VALUES 
+        (:id, 
+        :userId, 
+        :recipeId, 
+        :createdAt, 
+        :updatedAt)
        RETURNING *`,
       {
         replacements: {
@@ -37,7 +48,22 @@ const isFavorited = async (userId, recipeId) => {
   }
 };
 
+const deleteFavorite = async (userId, recipeId) => {
+  try {
+    const [result] = await sequelize.query(
+      `DELETE FROM user_favorites 
+       WHERE "userId" = :userId AND "recipeId" = :recipeId 
+       RETURNING *`,
+      { replacements: { userId, recipeId } },
+    );
+    return result.length > 0;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default {
   addFavorite,
   isFavorited,
+  deleteFavorite,
 };
