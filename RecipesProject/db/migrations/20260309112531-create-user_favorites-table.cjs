@@ -17,6 +17,7 @@ module.exports = {
           model: "users",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       recipeId: {
         type: Sequelize.UUID,
@@ -25,6 +26,7 @@ module.exports = {
           model: "recipes",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       createdAt: {
         type: Sequelize.DATE,
