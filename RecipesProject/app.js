@@ -3,6 +3,7 @@ import { logger } from "./middlewares/logger.js";
 import cors from "cors";
 import recipeRouter from "./routes/recipeRoutes.js";
 import authRouter from "./routes/authRoutes.js";
+import userRouter from "./routes/userRoutes.js";
 import "./db.js";
 
 const app = express();
@@ -19,6 +20,7 @@ app.get("/", (req, res) => {
 
 app.use("/auth", authRouter);
 app.use("/recipes", recipeRouter);
+app.use("/users", userRouter);
 
 app.all(/^(.*)$/, (req, res) => {
   res.status(404).send("Page not found");
