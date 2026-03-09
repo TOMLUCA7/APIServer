@@ -53,6 +53,26 @@ const User = {
     );
     return rows?.[0] ?? null;
   },
+
+  // find user by id
+  findById: async (id) => {
+    const [rows] = await sequelize.query(
+      `SELECT 
+        id, 
+        username, 
+        email, 
+        "firstName", 
+        "lastName", 
+        "createdAt", 
+        "updatedAt" 
+      FROM users 
+      WHERE id = :id`,
+      {
+        replacements: { id },
+      },
+    );
+    return rows?.[0] ?? null;
+  },
 };
 
 export default User;
