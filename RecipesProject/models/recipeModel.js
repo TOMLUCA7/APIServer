@@ -59,6 +59,18 @@ const getRecipeById = async (id) => {
   }
 };
 
+const getRecipesByUserId = async (userId) => {
+  try {
+    const [results] = await sequelize.query(
+      'SELECT * FROM recipes WHERE "userId" = :userId',
+      { replacements: { userId } },
+    );
+    return results;
+  } catch (error) {
+    return [];
+  }
+};
+
 const addRecipe = async (recipe) => {
   const now = new Date().toISOString();
   const newRecipe = {
@@ -215,6 +227,7 @@ export default {
   getRecipeByMaxCookingTime,
   searchRecipes,
   getRecipeById,
+  getRecipesByUserId,
   addRecipe,
   updateRecipe,
   deleteRecipe,

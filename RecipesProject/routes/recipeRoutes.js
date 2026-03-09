@@ -14,6 +14,8 @@ router.get("/search/:search", recipesController.searchRecipes);
 
 router.get("/statistics", recipesController.getStatistics);
 
+router.get("/my-recipes", verifyToken, recipesController.getMyRecipes);
+
 router.get("/:id", recipesController.getRecipeById);
 
 router.post(

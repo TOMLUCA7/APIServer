@@ -68,6 +68,18 @@ const getRecipeById = async (req, res) => {
   }
 };
 
+const getMyRecipes = async (req, res) => {
+  try {
+    const recipes = await recipesModel.getRecipesByUserId(req.user.id);
+    if (!recipes || recipes.length === 0) {
+      return res.status(404).json({ error: "No recipes found for this user" });
+    }
+    res.status(200).json(recipes);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const addRecipe = async (req, res) => {
   try {
     const timestamp = new Date().toISOString();
@@ -147,6 +159,7 @@ export default {
   getRecipeByMaxCookingTime,
   searchRecipes,
   getRecipeById,
+  getMyRecipes,
   addRecipe,
   updateRecipe,
   deleteRecipe,
