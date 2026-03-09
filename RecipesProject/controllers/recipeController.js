@@ -73,7 +73,7 @@ const addRecipe = async (req, res) => {
     const timestamp = new Date().toISOString();
     const recipePayload = {
       ...req.body,
-      userId: req.user?.id ?? req.body.userId,
+      userId: req.user.id,
       createdAt: timestamp,
       updatedAt: timestamp,
       isPublic: req.body.isPublic ?? true,
@@ -90,10 +90,19 @@ const addRecipe = async (req, res) => {
 
 const updateRecipe = async (req, res) => {
   try {
-    const recipe = await recipesModel.updateRecipe(req.params.id, req.body);
-    if (!recipe) {
+    const existingRecipe = await recipesModel.getRecipeById(req.params.id);
+    if (!existingRecipe) {
       return res.status(404).json({ error: "No recipe found by this id" });
     }
+
+    // Ownership check
+    if (existingRecipe.userId !== req.user.id) {
+      return res
+        .status(403)
+        .json({ error: "Unauthorized: You do not own this recipe" });
+    }
+
+    const recipe = await recipesModel.updateRecipe(req.params.id, req.body);
     res.status(200).json(recipe);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -102,10 +111,18 @@ const updateRecipe = async (req, res) => {
 
 const deleteRecipe = async (req, res) => {
   try {
-    const recipe = await recipesModel.deleteRecipe(req.params.id);
-    if (!recipe) {
+    const existingRecipe = await recipesModel.getRecipeById(req.params.id);
+    if (!existingRecipe) {
       return res.status(404).json({ error: "No recipe found by this id" });
     }
+
+    if (existingRecipe.userId !== req.user.id) {
+      return res
+        .status(403)
+        .json({ error: "Unauthorized: You do not own this recipe" });
+    }
+
+    const success = await recipesModel.deleteRecipe(req.params.id);
     res.status(200).json(`Recipe deleted successfully ${req.params.id}`);
   } catch (error) {
     res.status(500).json({ error: error.message });
