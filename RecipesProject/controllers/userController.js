@@ -55,7 +55,21 @@ const deleteFavorite = async (req, res) => {
   }
 };
 
+const getFavorites = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const favorites = await favoriteModel.getFavorites(userId);
+    if (!favorites || favorites.length === 0) {
+      return res.status(404).json({ error: "No favorites found" });
+    }
+    res.status(200).json(favorites);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export default {
   addFavorite,
   deleteFavorite,
+  getFavorites,
 };

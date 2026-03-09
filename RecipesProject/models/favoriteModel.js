@@ -62,8 +62,27 @@ const deleteFavorite = async (userId, recipeId) => {
   }
 };
 
+const getFavorites = async (userId) => {
+  try {
+    const [results] = await sequelize.query(
+      `SELECT * 
+      FROM 
+        user_favorites 
+      JOIN 
+        recipes ON user_favorites.recipeId = recipes.id 
+      WHERE 
+        user_favorites.userId = :userId`,
+      { replacements: { userId } },
+    );
+    return results;
+  } catch (error) {
+    return [];
+  }
+};
+
 export default {
   addFavorite,
   isFavorited,
   deleteFavorite,
+  getFavorites,
 };
