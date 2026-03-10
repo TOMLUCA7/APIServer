@@ -2,6 +2,8 @@ import express from "express";
 import recipesController from "../controllers/recipeController.js";
 import recipesValidation from "../middlewares/recipesValidation.js";
 import verifyToken from "../middlewares/authMiddleware.js";
+import multer from "multer";
+const upload = multer({ dest: "public/" });
 const router = express.Router();
 
 router.get("/", recipesController.getRecipes);
@@ -21,6 +23,7 @@ router.get("/:id", recipesController.getRecipeById);
 router.post(
   "/",
   verifyToken,
+  upload.single("image"),
   recipesValidation.recipeValidation,
   recipesController.addRecipe,
 );
