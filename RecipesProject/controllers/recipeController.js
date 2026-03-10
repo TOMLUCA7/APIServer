@@ -1,4 +1,7 @@
 import recipesModel from "../models/recipeModel.js";
+import cloudinary from "../config/cloudinary.js";
+import fs from "fs/promises";
+import path from "path";
 
 const getRecipes = async (req, res) => {
   try {
@@ -83,9 +86,27 @@ const getMyRecipes = async (req, res) => {
 const addRecipe = async (req, res) => {
   try {
     const timestamp = new Date().toISOString();
+    
+    let imageUrl = req.body.imageUrl;
+    
+    if (req.file) {
+      try {
+        const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+          folder: "recipes_project",
+        });
+        imageUrl = uploadResult.secure_url;
+        // Delete the file from the server after the upload
+        await fs.unlink(req.file.path);
+      } catch (error) {
+        console.error("Cloudinary upload error:", error);
+        return res.status(500).json({ error: "Failed to upload image to Cloudinary" });
+      }
+    }
+
     const recipePayload = {
       ...req.body,
       userId: req.user.id,
+      imageUrl: imageUrl,
       createdAt: timestamp,
       updatedAt: timestamp,
       isPublic: req.body.isPublic ?? true,
@@ -114,7 +135,28 @@ const updateRecipe = async (req, res) => {
         .json({ error: "Unauthorized: You do not own this recipe" });
     }
 
-    const recipe = await recipesModel.updateRecipe(req.params.id, req.body);
+    const updateData = { ...req.body };
+    
+    // Protected fields that should not be updated
+    delete updateData.id;
+    delete updateData.userId;
+    delete updateData.createdAt;
+
+    if (req.file) {
+      try {
+        const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+          folder: "recipes_project",
+        });
+        updateData.imageUrl = uploadResult.secure_url;
+        // Delete the file from the server after the upload
+        await fs.unlink(req.file.path);
+      } catch (error) {
+        console.error("Cloudinary upload error:", error);
+        return res.status(500).json({ error: "Failed to upload image to Cloudinary" });
+      }
+    }
+
+    const recipe = await recipesModel.updateRecipe(req.params.id, updateData);
     res.status(200).json(recipe);
   } catch (error) {
     res.status(500).json({ error: error.message });

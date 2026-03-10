@@ -31,6 +31,7 @@ router.post(
 router.put(
   "/:id",
   verifyToken,
+  upload.single("image"),
   recipesValidation.recipeValidation,
   recipesController.updateRecipe,
 );

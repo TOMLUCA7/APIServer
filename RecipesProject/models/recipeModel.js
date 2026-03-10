@@ -53,9 +53,9 @@ const getRecipeById = async (id) => {
       "SELECT * FROM recipes WHERE id = :id",
       { replacements: { id } },
     );
-    return result;
+    return result[0] || null;
   } catch (error) {
-    return [];
+    return null;
   }
 };
 
