@@ -2,8 +2,7 @@ import express from "express";
 import recipesController from "../controllers/recipeController.js";
 import recipesValidation from "../middlewares/recipesValidation.js";
 import verifyToken from "../middlewares/authMiddleware.js";
-import multer from "multer";
-const upload = multer({ dest: "public/" });
+import { upload, uploadToCloudinary } from "../middlewares/uploadMiddleware.js";
 const router = express.Router();
 
 router.get("/", recipesController.getRecipes);
@@ -24,6 +23,7 @@ router.post(
   "/",
   verifyToken,
   upload.single("image"),
+  uploadToCloudinary,
   recipesValidation.recipeValidation,
   recipesController.addRecipe,
 );
@@ -32,6 +32,7 @@ router.put(
   "/:id",
   verifyToken,
   upload.single("image"),
+  uploadToCloudinary,
   recipesValidation.recipeValidation,
   recipesController.updateRecipe,
 );

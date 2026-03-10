@@ -1,7 +1,4 @@
 import recipesModel from "../models/recipeModel.js";
-import cloudinary from "../config/cloudinary.js";
-import fs from "fs/promises";
-import path from "path";
 
 const getRecipes = async (req, res) => {
   try {
@@ -86,22 +83,7 @@ const getMyRecipes = async (req, res) => {
 const addRecipe = async (req, res) => {
   try {
     const timestamp = new Date().toISOString();
-    
-    let imageUrl = req.body.imageUrl;
-    
-    if (req.file) {
-      try {
-        const uploadResult = await cloudinary.uploader.upload(req.file.path, {
-          folder: "recipes_project",
-        });
-        imageUrl = uploadResult.secure_url;
-        // Delete the file from the server after the upload
-        await fs.unlink(req.file.path);
-      } catch (error) {
-        console.error("Cloudinary upload error:", error);
-        return res.status(500).json({ error: "Failed to upload image to Cloudinary" });
-      }
-    }
+    const imageUrl = req.file?.path || req.body.imageUrl;
 
     const recipePayload = {
       ...req.body,
@@ -142,18 +124,8 @@ const updateRecipe = async (req, res) => {
     delete updateData.userId;
     delete updateData.createdAt;
 
-    if (req.file) {
-      try {
-        const uploadResult = await cloudinary.uploader.upload(req.file.path, {
-          folder: "recipes_project",
-        });
-        updateData.imageUrl = uploadResult.secure_url;
-        // Delete the file from the server after the upload
-        await fs.unlink(req.file.path);
-      } catch (error) {
-        console.error("Cloudinary upload error:", error);
-        return res.status(500).json({ error: "Failed to upload image to Cloudinary" });
-      }
+    if (req.file?.path) {
+      updateData.imageUrl = req.file.path;
     }
 
     const recipe = await recipesModel.updateRecipe(req.params.id, updateData);
