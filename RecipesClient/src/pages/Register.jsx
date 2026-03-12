@@ -1,5 +1,4 @@
-import * as React from 'react'
-
+import { Link } from 'react-router-dom'
 import Layout from '../components/Layout'
 import { Button } from '../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
@@ -61,6 +60,12 @@ export default function Register() {
                 {loading ? 'Creating account...' : 'Create account'}
               </Button>
             </form>
+            <div className="mt-4 text-center text-sm text-slate-500">
+              Already have an account?{' '}
+              <Link to="/login" className="font-medium text-slate-900 hover:underline underline-offset-4">
+                Login
+              </Link>
+            </div>
           </CardContent>
         </Card>
       </div>
