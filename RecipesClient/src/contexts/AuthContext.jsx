@@ -73,7 +73,16 @@ export function AuthProvider({ children }) {
         lastName: '',
       })
       const { token: authToken, user: authUser } = response.data
-      persistAuth(authToken, authUser)
+      if (authToken) {
+        persistAuth(authToken, authUser)
+      } else {
+        const loginResponse = await apiClient.post('/auth/login', {
+          email,
+          password,
+        })
+        const { token: loginToken, user: loginUser } = loginResponse.data
+        persistAuth(loginToken, loginUser)
+      }
       toast({ title: 'Account created', description: 'Welcome to Recipe Vault.' })
       return { ok: true }
     } catch (error) {
