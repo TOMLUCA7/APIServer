@@ -44,7 +44,7 @@ export default function Home() {
   return (
     <Layout>
       <div className="grid gap-8">
-        <Card className="overflow-hidden bg-gradient-to-br from-white via-slate-50 to-slate-100">
+        <Card className="overflow-hidden bg-linear-to-br from-white via-slate-50 to-slate-100">
           <CardContent className="grid gap-6 p-8 md:grid-cols-[1.2fr_1fr] md:items-center">
             <div className="space-y-4">
               <p className="text-xs uppercase tracking-[0.3em] text-slate-400">

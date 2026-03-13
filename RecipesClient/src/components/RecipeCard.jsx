@@ -14,11 +14,11 @@ export default function RecipeCard({ recipe }) {
   const image = recipe?.imageUrl || recipe?.image || recipe?.photoUrl || fallbackImage
   const title = recipe?.title || 'Untitled recipe'
   const difficulty = recipe?.difficulty || 'Unknown'
-  const cookTime = recipe?.cookTime || recipe?.time || 'N/A'
+  const cookTime = recipe?.cookingTime || 'N/A'
 
   return (
     <Card className="overflow-hidden">
-      <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100">
+      <div className="aspect-video w-full overflow-hidden bg-slate-100">
         <img
           src={image}
           alt={title}
