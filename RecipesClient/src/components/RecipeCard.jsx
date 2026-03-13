@@ -10,14 +10,25 @@ import {
 const fallbackImage =
   'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=80'
 
-export default function RecipeCard({ recipe }) {
+export default function RecipeCard({ recipe, onClick }) {
   const image = recipe?.imageUrl || recipe?.image || recipe?.photoUrl || fallbackImage
   const title = recipe?.title || 'Untitled recipe'
   const difficulty = recipe?.difficulty || 'Unknown'
   const cookTime = recipe?.cookingTime || 'N/A'
 
   return (
-    <Card className="overflow-hidden">
+    <Card
+      className="overflow-hidden cursor-pointer transition-shadow hover:shadow-lg"
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          onClick?.()
+        }
+      }}
+    >
       <div className="aspect-video w-full overflow-hidden bg-slate-100">
         <img
           src={image}
