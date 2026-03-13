@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
 import { Button } from '../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
@@ -7,7 +7,8 @@ import { Input } from '../components/ui/input'
 import { useAuth } from '../contexts/AuthContext'
 
 export default function Login() {
-  const { login, loading } = useAuth()
+  const { login, loading, isAuthenticated } = useAuth()
+  const navigate = useNavigate()
   const [formState, setFormState] = React.useState({
     email: '',
     password: '',
@@ -20,8 +21,17 @@ export default function Login() {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    await login(formState)
+    const result = await login(formState)
+    if (result?.ok) {
+      navigate('/')
+    }
   }
+
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/')
+    }
+  }, [isAuthenticated, navigate])
 
   return (
     <Layout title="Welcome back">
