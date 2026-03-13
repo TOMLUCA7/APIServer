@@ -27,14 +27,14 @@ export default function RecipeGrid({ recipes = [] }) {
     return []
   }
 
-  const getOwnerLabel = (recipe) =>
-    recipe?.user?.username ||
-    recipe?.user?.name ||
-    recipe?.username ||
-    recipe?.userName ||
-    recipe?.owner?.username ||
-    recipe?.owner?.name ||
-    'Unknown'
+  // const getOwnerLabel = (recipe) =>
+  //   recipe?.user?.username ||
+  //   recipe?.user?.name ||
+  //   recipe?.username ||
+  //   recipe?.userName ||
+  //   recipe?.owner?.username ||
+  //   recipe?.owner?.name ||
+  //   'Unknown'
 
   const getImageSrc = (recipe) => {
     const image =
@@ -132,9 +132,9 @@ export default function RecipeGrid({ recipes = [] }) {
                   </div>
                 </div>
 
-                <div className="border-t border-slate-200 pt-4 text-xs text-slate-500">
+                {/* <div className="border-t border-slate-200 pt-4 text-xs text-slate-500">
                   Uploaded by {getOwnerLabel(selectedRecipe)}
-                </div>
+                </div> */}
               </div>
             </div>
           )}
