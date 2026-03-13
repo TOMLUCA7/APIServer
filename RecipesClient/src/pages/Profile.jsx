@@ -68,11 +68,11 @@ export default function Profile() {
           <CardContent className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-4">
               <div className="grid h-14 w-14 place-items-center rounded-full border border-slate-200 bg-slate-100 text-lg font-semibold text-slate-700">
-                {user?.name?.charAt(0) || 'U'}
+                {(user?.name || user?.username)?.charAt(0) || 'U'}
               </div>
               <div>
                 <p className="text-lg font-semibold text-slate-900">
-                  {user?.name || 'User'}
+                  {user?.name || user?.username || 'User'}
                 </p>
                 <p className="text-sm text-slate-500">{user?.email || ''}</p>
               </div>

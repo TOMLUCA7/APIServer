@@ -62,13 +62,15 @@ export function AuthProvider({ children }) {
     }
   }
 
-  const register = async ({ name, email, password }) => {
+  const register = async ({ username, email, password }) => {
     setLoading(true)
     try {
       const response = await apiClient.post('/auth/register', {
-        name,
+        username,
         email,
         password,
+        firstName: '',
+        lastName: '',
       })
       const { token: authToken, user: authUser } = response.data
       persistAuth(authToken, authUser)

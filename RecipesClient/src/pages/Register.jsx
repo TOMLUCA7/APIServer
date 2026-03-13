@@ -10,7 +10,7 @@ export default function Register() {
   const { register, loading, isAuthenticated } = useAuth()
   const navigate = useNavigate()
   const [formState, setFormState] = React.useState({
-    name: '',
+    username: '',
     email: '',
     password: '',
   })
@@ -45,9 +45,9 @@ export default function Register() {
             <form className="space-y-4" onSubmit={handleSubmit}>
               <Input
                 type="text"
-                name="name"
-                placeholder="Name"
-                value={formState.name}
+                name="username"
+                placeholder="Username"
+                value={formState.username}
                 onChange={handleChange}
                 required
               />

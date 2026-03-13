@@ -28,10 +28,10 @@ export default function Layout({ children, title = 'Recipe Vault', actions }) {
               <>
                 <Link to="/profile" className="flex items-center gap-3 mr-2 hover:opacity-80 transition-opacity">
                   <div className="h-8 w-8 rounded-full bg-slate-100 grid place-items-center text-xs font-medium text-slate-600 border border-slate-200">
-                    {user?.name?.charAt(0) || 'U'}
+                    {(user?.name || user?.username)?.charAt(0) || 'U'}
                   </div>
                   <span className="text-sm font-medium text-slate-700 hidden sm:block">
-                    {user?.name || 'User'}
+                    {user?.name || user?.username || 'User'}
                   </span>
                 </Link>
                 <Button variant="outline" size="sm" onClick={logout}>
