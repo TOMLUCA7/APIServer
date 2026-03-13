@@ -6,10 +6,13 @@ import { Button } from '../components/ui/button'
 import { Card, CardContent } from '../components/ui/card'
 import apiClient from '../lib/apiClient'
 import { toast } from '../hooks/use-toast'
+import { useNavigate } from 'react-router-dom'
 
 export default function Home() {
   const [recipes, setRecipes] = React.useState([])
   const [loading, setLoading] = React.useState(true)
+
+  const navigate = useNavigate()
 
   React.useEffect(() => {
     let isMounted = true
@@ -58,8 +61,7 @@ export default function Home() {
                 every bite with a clean, modern recipe vault.
               </p>
               <div className="flex flex-wrap gap-3">
-                <Button>Explore Recipes</Button>
-                <Button variant="outline">Upload New</Button>
+                <Button onClick={() => navigate('/recipes/new')}>Upload New</Button>
               </div>
             </div>
             <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
