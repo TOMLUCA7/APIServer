@@ -37,7 +37,9 @@ export default function Layout({ children, title = 'Recipe Vault', actions }) {
                 <Button variant="outline" size="sm" onClick={logout}>
                   Logout
                 </Button>
-                <Button size="sm">Upload Recipe</Button>
+                <Button size="sm" asChild>
+                  <Link to="/recipes/new">Upload Recipe</Link>
+                </Button>
               </>
             ) : (
               <>
