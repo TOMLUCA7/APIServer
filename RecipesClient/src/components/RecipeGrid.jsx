@@ -11,7 +11,7 @@ import {
 } from './ui/dialog'
 import { API_BASE_URL } from '../lib/apiClient'
 
-export default function RecipeGrid({ recipes = [] }) {
+export default function RecipeGrid({ recipes = [], renderActions }) {
   const [selectedRecipe, setSelectedRecipe] = React.useState(null)
 
   const parseList = (value) => {
@@ -27,14 +27,14 @@ export default function RecipeGrid({ recipes = [] }) {
     return []
   }
 
-  // const getOwnerLabel = (recipe) =>
-  //   recipe?.user?.username ||
-  //   recipe?.user?.name ||
-  //   recipe?.username ||
-  //   recipe?.userName ||
-  //   recipe?.owner?.username ||
-  //   recipe?.owner?.name ||
-  //   'Unknown'
+  const getOwnerName = (recipe) =>
+    recipe?.user?.username ||
+    recipe?.user?.name ||
+    recipe?.username ||
+    recipe?.userName ||
+    recipe?.owner?.username ||
+    recipe?.owner?.name ||
+    null
 
   const getImageSrc = (recipe) => {
     const image =
@@ -61,6 +61,8 @@ export default function RecipeGrid({ recipes = [] }) {
     )
   }
 
+  const closeModal = () => setSelectedRecipe(null)
+
   return (
     <>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -73,10 +75,7 @@ export default function RecipeGrid({ recipes = [] }) {
         ))}
       </div>
 
-      <Dialog
-        open={Boolean(selectedRecipe)}
-        onOpenChange={() => setSelectedRecipe(null)}
-      >
+      <Dialog open={Boolean(selectedRecipe)} onOpenChange={closeModal}>
         <DialogContent className="max-w-3xl">
           {selectedRecipe && (
             <div className="grid gap-6 md:grid-cols-[1.1fr_1fr]">
@@ -132,9 +131,16 @@ export default function RecipeGrid({ recipes = [] }) {
                   </div>
                 </div>
 
-                {/* <div className="border-t border-slate-200 pt-4 text-xs text-slate-500">
-                  Uploaded by {getOwnerLabel(selectedRecipe)}
-                </div> */}
+                {getOwnerName(selectedRecipe) ? (
+                  <div className="border-t border-slate-200 pt-4 text-xs text-slate-500">
+                    Uploaded by {getOwnerName(selectedRecipe)}
+                  </div>
+                ) : null}
+                {renderActions ? (
+                  <div className="flex flex-wrap items-center gap-2">
+                    {renderActions(selectedRecipe, { close: closeModal })}
+                  </div>
+                ) : null}
               </div>
             </div>
           )}

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import Layout from '../components/Layout'
 import { Button } from '../components/ui/button'
@@ -15,6 +15,9 @@ const difficultyOptions = ['easy', 'medium', 'hard']
 export default function AddRecipe() {
   const { isAuthenticated, authReady } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  const { id } = useParams()
+  const isEditMode = Boolean(id)
   const [submitting, setSubmitting] = React.useState(false)
   const [formState, setFormState] = React.useState({
     title: '',
@@ -83,11 +86,20 @@ export default function AddRecipe() {
         payload.append('image', imageFile)
       }
 
-      await apiClient.post('/recipes', payload, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
+      if (isEditMode) {
+        await apiClient.put(`/recipes/${id}`, payload, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
+      } else {
+        await apiClient.post('/recipes', payload, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
+      }
 
-      toast({ title: 'Recipe created', description: 'Your recipe is live.' })
+      toast({
+        title: isEditMode ? 'Recipe updated' : 'Recipe created',
+        description: isEditMode ? 'Your changes were saved.' : 'Your recipe is live.',
+      })
       navigate('/profile')
     } catch (error) {
       const message =
@@ -99,11 +111,11 @@ export default function AddRecipe() {
   }
 
   return (
-    <Layout title="Add Recipe">
+    <Layout title={isEditMode ? 'Update Recipe' : 'Add Recipe'}>
       <div className="mx-auto w-full max-w-3xl space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>New recipe</CardTitle>
+            <CardTitle>{isEditMode ? 'Update recipe' : 'New recipe'}</CardTitle>
           </CardHeader>
           <CardContent>
             <form className="space-y-6" onSubmit={handleSubmit}>
@@ -267,3 +279,32 @@ export default function AddRecipe() {
     </Layout>
   )
 }
+  const toLines = (value) => {
+    if (Array.isArray(value)) return value.join('\n')
+    if (typeof value === 'string') {
+      try {
+        const parsed = JSON.parse(value)
+        if (Array.isArray(parsed)) return parsed.join('\n')
+      } catch (error) {
+        return value
+      }
+    }
+    return ''
+  }
+
+  React.useEffect(() => {
+    if (!isEditMode) return
+    const recipe = location.state?.recipe
+    if (!recipe) return
+    setFormState((prev) => ({
+      ...prev,
+      title: recipe.title || '',
+      description: recipe.description || '',
+      cookingTime: recipe.cookingTime ?? '',
+      servings: recipe.servings ?? '',
+      difficulty: recipe.difficulty || 'easy',
+      ingredients: toLines(recipe.ingredients),
+      instructions: toLines(recipe.instructions),
+      imageUrl: recipe.imageUrl || recipe.image || recipe.photoUrl || '',
+    }))
+  }, [isEditMode, location.state])
