@@ -18,6 +18,7 @@ export default function AddRecipe() {
   const location = useLocation()
   const { id } = useParams()
   const isEditMode = Boolean(id)
+  const [initializing, setInitializing] = React.useState(isEditMode)
   const [submitting, setSubmitting] = React.useState(false)
   const [formState, setFormState] = React.useState({
     title: '',
@@ -32,11 +33,89 @@ export default function AddRecipe() {
   })
   const [imageFile, setImageFile] = React.useState(null)
 
+  const toLines = (value) => {
+    if (Array.isArray(value)) return value.join('\n')
+    if (typeof value === 'string') {
+      try {
+        const parsed = JSON.parse(value)
+        if (Array.isArray(parsed)) return parsed.join('\n')
+      } catch (error) {
+        return value
+      }
+    }
+    return ''
+  }
+
   React.useEffect(() => {
     if (authReady && !isAuthenticated) {
       navigate('/login')
     }
   }, [authReady, isAuthenticated, navigate])
+
+  React.useEffect(() => {
+    if (!isEditMode) {
+      setInitializing(false)
+      return
+    }
+
+    const recipeFromState = location.state?.recipe
+    if (recipeFromState) {
+      setFormState((prev) => ({
+        ...prev,
+        title: recipeFromState.title || '',
+        description: recipeFromState.description || '',
+        cookingTime: recipeFromState.cookingTime ?? '',
+        servings: recipeFromState.servings ?? '',
+        difficulty: recipeFromState.difficulty || 'easy',
+        ingredients: toLines(recipeFromState.ingredients),
+        instructions: toLines(recipeFromState.instructions),
+        imageUrl:
+          recipeFromState.imageUrl ||
+          recipeFromState.image ||
+          recipeFromState.photoUrl ||
+          '',
+      }))
+      setInitializing(false)
+      return
+    }
+
+    let isMounted = true
+    const fetchRecipe = async () => {
+      try {
+        const response = await apiClient.get(`/recipes/${id}`)
+        if (!isMounted) return
+        const recipe = response.data
+        if (recipe) {
+          setFormState((prev) => ({
+            ...prev,
+            title: recipe.title || '',
+            description: recipe.description || '',
+            cookingTime: recipe.cookingTime ?? '',
+            servings: recipe.servings ?? '',
+            difficulty: recipe.difficulty || 'easy',
+            ingredients: toLines(recipe.ingredients),
+            instructions: toLines(recipe.instructions),
+            imageUrl: recipe.imageUrl || recipe.image || recipe.photoUrl || '',
+          }))
+        }
+      } catch (error) {
+        toast({
+          title: 'Unable to load recipe',
+          description: 'Please go back and try again.',
+          variant: 'destructive',
+        })
+      } finally {
+        if (isMounted) {
+          setInitializing(false)
+        }
+      }
+    }
+
+    fetchRecipe()
+    return () => {
+      isMounted = false
+    }
+  }, [id, isEditMode, location.state])
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target
@@ -118,8 +197,18 @@ export default function AddRecipe() {
             <CardTitle>{isEditMode ? 'Update recipe' : 'New recipe'}</CardTitle>
           </CardHeader>
           <CardContent>
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <div className="grid gap-4 sm:grid-cols-2">
+            {initializing ? (
+              <div className="space-y-4">
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="h-10 w-full animate-pulse rounded-md bg-slate-100"
+                  />
+                ))}
+              </div>
+            ) : (
+              <form className="space-y-6" onSubmit={handleSubmit}>
+                <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-slate-700">Title</label>
                   <Input
@@ -268,43 +357,19 @@ export default function AddRecipe() {
                 <div className="flex items-center gap-2">
                   <Badge variant="secondary">Uploads to Cloudinary</Badge>
                   <Button type="submit" disabled={submitting}>
-                    {submitting ? 'Saving...' : 'Save recipe'}
+                    {submitting
+                      ? 'Saving...'
+                      : isEditMode
+                        ? 'Update recipe'
+                        : 'Save recipe'}
                   </Button>
                 </div>
               </div>
-            </form>
+              </form>
+            )}
           </CardContent>
         </Card>
       </div>
     </Layout>
   )
 }
-  const toLines = (value) => {
-    if (Array.isArray(value)) return value.join('\n')
-    if (typeof value === 'string') {
-      try {
-        const parsed = JSON.parse(value)
-        if (Array.isArray(parsed)) return parsed.join('\n')
-      } catch (error) {
-        return value
-      }
-    }
-    return ''
-  }
-
-  React.useEffect(() => {
-    if (!isEditMode) return
-    const recipe = location.state?.recipe
-    if (!recipe) return
-    setFormState((prev) => ({
-      ...prev,
-      title: recipe.title || '',
-      description: recipe.description || '',
-      cookingTime: recipe.cookingTime ?? '',
-      servings: recipe.servings ?? '',
-      difficulty: recipe.difficulty || 'easy',
-      ingredients: toLines(recipe.ingredients),
-      instructions: toLines(recipe.instructions),
-      imageUrl: recipe.imageUrl || recipe.image || recipe.photoUrl || '',
-    }))
-  }, [isEditMode, location.state])
