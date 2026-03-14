@@ -60,6 +60,12 @@ export default function Profile() {
   }, [isAuthenticated])
 
   const handleDelete = async (recipeId, closeModal) => {
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this recipe? This action cannot be undone.',
+    )
+    if (!confirmed) {
+      return
+    }
     try {
       await apiClient.delete(`/recipes/${recipeId}`)
       setRecipes((prev) => prev.filter((recipe) => (recipe.id || recipe._id) !== recipeId))
